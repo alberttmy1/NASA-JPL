@@ -13,7 +13,7 @@ int main() {
     SpiceDouble    lt;
     SpiceDouble    state[6];
 
-	prompt_c("Enter kernel file name > ", kern);
+	prompt_c("Enter kernel file name > ", STRLEN, kern);
     furnsh_c(kern);
 
     prompt_c("Enter UTC epoch             > ", STRLEN, utc);
