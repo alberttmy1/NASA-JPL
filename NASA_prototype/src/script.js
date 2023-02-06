@@ -1,10 +1,11 @@
 import './style.css'
-import * as THREE from 'three'
+import * as THREE from "../node_modules/three/build/three.module.js"
+//import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
-import SceneInit from "./lib/SceneInit";
-import Planet from "./lib/Planet";
-import Rotation from "./lib/Rotation";
+import SceneInit from "./lib/SceneInit.js";
+import Planet from "./lib/Planet.js";
+import Rotation from "./lib/Rotation.js";
 
 //app.use('/assets', express.static(path.join(__dirname, './assets')));
 

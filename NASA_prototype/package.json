@@ -1,6 +1,7 @@
 {
   "repository": "#",
   "license": "UNLICENSED",
+  "type": "module",
   "scripts": {
     "build": "webpack --config ./bundler/webpack.prod.js",
     "dev": "webpack serve --config ./bundler/webpack.dev.js"
@@ -29,3 +30,4 @@
     "webpack-cli": "^4.10.0"
   }
 }
+

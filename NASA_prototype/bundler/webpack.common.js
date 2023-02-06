@@ -15,7 +15,8 @@ module.exports = {
     [
         new CopyWebpackPlugin({
             patterns: [
-                { from: path.resolve(__dirname, '../static') }
+                //added noErrorOnMissing to resolve unable to loacte static' glob
+                { from: path.resolve(__dirname, '../static'), noErrorOnMissing:true }
             ]
         }),
         new HtmlWebpackPlugin({
