@@ -11,4 +11,74 @@
         <canvas id="myThreeJsCanvas" >
     </div>
 </body>
+<body class="bg">
+    <div class="sidenav">
+      <!--Environment-->
+      <button type="button"  class="collapsible">Environment</button>
+      <div class="content">
+        <input type="checkbox" id="env_body" name="showBody" value="Body" checked>
+        <label for="env_body"> Show Solar System</label><br>
+        <input type="checkbox" id="env_traj" name="showTraj" value="Trajectory" checked>
+        <label for="env_traj"> Show All Trajectories</label><br>
+        <input type="checkbox" id="env_grad" name="showGrad" value="Speed Gradient">
+        <label for="env_grad"> Show All Speed Gradients</label><br>
+      </div>
+      <!--Objects-->
+      <button type="button" class="collapsible">Objects</button>
+      <div class="content">
+        <div id="myDropdown" class="dropdown-content">
+          <!--Search Bar-->
+          <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+          <!--Example Planetary Objects-->
+          <button type="button" class="collapsible">Earth</button>
+          <div class="content" >
+            <input type="checkbox" id="env_body" name="showBody" value="Body" checked>
+            <label for="env_body"> Show Body</label><br>
+            <input type="checkbox" id="env_traj" name="showTraj" value="Trajectory" checked>
+            <label for="env_traj"> Show Trajectory</label><br>
+            <input type="checkbox" id="env_grad" name="showGrad" value="Speed Gradient">
+            <label for="env_grad"> Speed Gradient</label><br>
+          </div>
+          <button type="button" class="collapsible">Mars</button>
+          <div class="content">
+            <input type="checkbox" id="env_body" name="showBody" value="Body" checked>
+            <label for="env_body"> Show Body</label><br>
+            <input type="checkbox" id="env_traj" name="showTraj" value="Trajectory" checked>
+            <label for="env_traj"> Show Trajectory</label><br>
+            <input type="checkbox" id="env_grad" name="showGrad" value="Speed Gradient">
+            <label for="env_grad"> Speed Gradient</label><br>
+          </div>
+        </div>
+      </div>
+      <!--Trajectories-->
+      <button type="button" class="collapsible">Missions</button>
+      <div class="content">
+        <div id="myDropdown2" class="dropdown-content">
+          <!--Search Bar-->
+          <input type="text" placeholder="Search.." id="myInput2" onkeyup="filterFunction2()">
+          <!--Example Planetary Objects-->
+          <button type="button" class="collapsible">Apollo II</button>
+          <div class="content" >
+            <input type="checkbox" id="env_body" name="showBody" value="Body" checked>
+            <label for="env_body"> Show Body</label><br>
+            <input type="checkbox" id="env_traj" name="showTraj" value="Trajectory" checked>
+            <label for="env_traj"> Show Trajectory</label><br>
+            <input type="checkbox" id="env_grad" name="showGrad" value="Speed Gradient">
+            <label for="env_grad"> Speed Gradient</label><br>
+          </div>
+          <button type="button" class="collapsible">Mars Mission</button>
+          <div class="content">
+            <input type="checkbox" id="env_body" name="showBody" value="Body" checked>
+            <label for="env_body"> Show Body</label><br>
+            <input type="checkbox" id="env_traj" name="showTraj" value="Trajectory" checked>
+            <label for="env_traj"> Show Trajectory</label><br>
+            <input type="checkbox" id="env_grad" name="showGrad" value="Speed Gradient">
+            <label for="env_grad"> Speed Gradient</label><br>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!--Sidebar-->
+  </body>
 </html>
