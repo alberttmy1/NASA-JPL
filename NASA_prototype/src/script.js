@@ -134,7 +134,7 @@ var missions = ["Mars Mission", "Apollo I", "Apollo II"];
 
 // call function to add buttons to collapsible
 addButtons(objects, "objects");
-addButtons(missions, "missions")
+addButtons(missions, "missions");
 
 function filterObjects() {
   var input, filter, ul, li, a, i;
