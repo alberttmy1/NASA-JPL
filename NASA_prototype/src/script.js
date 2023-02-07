@@ -7,7 +7,14 @@ import SceneInit from "./lib/SceneInit";
 import Planet from "./lib/Planet";
 import Rotation from "./lib/Rotation";
 
-//app.use('/assets', express.static(path.join(__dirname, './assets')));
+function importAll(r) {
+  let images = {};
+  r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+  return images;
+}
+
+const images = importAll(require.context('./assets', false, /\.(png|jpe?g|svg)$/));
+
 
 function filterFunction() {
   var input, filter, ul, li, a, i;
@@ -53,6 +60,10 @@ const gui = new dat.GUI()
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
+//console tests
+//console.log(images['sun.jpeg'].default);
+//console.log(images);
+
 // Scene
 //const scene = new THREE.Scene()
 let test = new SceneInit();
@@ -63,8 +74,8 @@ test.animate();
 
 // Radius,Hight, width
 const sunGeometry = new THREE.SphereGeometry(8);
-//TODO fix these shitty textures
-const sunTexture = new THREE.TextureLoader().load('./sun.jpeg');
+//const sunTexture = new THREE.TextureLoader().load('./mercury.png');
+const sunTexture = new THREE.TextureLoader().load(images['sun.jpg'].default);
 
 // const sunGeometry = new THREE.BoxGeometry(8,8,8)
 
@@ -86,22 +97,22 @@ test.scene.add(solarSystem);
 
 
 //planets
-const mercury = new Planet(2, 16, "mercury.png");
+const mercury = new Planet(2, 16, images['mercury.png'].default);
 const mercuryMesh = mercury.getMesh();
 let mercurySystem = new THREE.Group();
 mercurySystem.add(mercuryMesh);
 
-const venus = new Planet(3, 32, "venus.jpeg");
+const venus = new Planet(3, 32, images['venus.jpg'].default);
 const venusMesh = venus.getMesh();
 let venusSystem = new THREE.Group();
 venusSystem.add(venusMesh);
 
-const earth = new Planet(4, 48, "earth.jpeg");
+const earth = new Planet(4, 48, images['earth.jpg'].default);
 const earthMesh = earth.getMesh();
 let earthSystem = new THREE.Group();
 earthSystem.add(earthMesh);
 
-const mars = new Planet(3, 64, "mars.jpeg");
+const mars = new Planet(3, 64, images['mars.jpg'].default);
 const marsMesh = mars.getMesh();
 let marsSystem = new THREE.Group();
 marsSystem.add(marsMesh);
