@@ -15,12 +15,132 @@ function importAll(r) {
 
 const images = importAll(require.context('./assets', false, /\.(png|jpe?g|svg)$/));
 
+/*
+<!--Search Bar-->
+          <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+          <!--Example Planetary Objects-->
+          <button type="button" class="collapsible">Earth</button>
+          <div class="content" >
+            <input type="checkbox" id="env_body" name="showBody" value="Body" checked>
+            <label for="env_body"> Show Body</label><br>
+            <input type="checkbox" id="env_traj" name="showTraj" value="Trajectory" checked>
+            <label for="env_traj"> Show Trajectory</label><br>
+            <input type="checkbox" id="env_grad" name="showGrad" value="Speed Gradient">
+            <label for="env_grad"> Speed Gradient</label><br>
+          </div>
+          <button type="button" class="collapsible">Mars</button>
+          <div class="content">
+            <input type="checkbox" id="env_body" name="showBody" value="Body" checked>
+            <label for="env_body"> Show Body</label><br>
+            <input type="checkbox" id="env_traj" name="showTraj" value="Trajectory" checked>
+            <label for="env_traj"> Show Trajectory</label><br>
+            <input type="checkbox" id="env_grad" name="showGrad" value="Speed Gradient">
+            <label for="env_grad"> Speed Gradient</label><br>
+          </div>
+          */
 
-function filterFunction() {
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+
+// function to add buttons to collapsible
+function addButtons(objects, id) {
+  var buttonsContainer = document.getElementById(id);
+  objects.forEach(function(objects) {
+    var button = document.createElement("button");
+    button.innerHTML = objects;
+    button.type = "button";
+    button.classList.add("collapsible");
+    //buttonsContainer.appendChild(button);
+
+    // create content div
+    var content = document.createElement("div");
+    content.classList.add("content");
+
+    // add checkboxes to content div
+    // BODY
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = "env_body";
+    checkbox.value = "Body";
+    checkbox.name = "showBody";
+    checkbox.checked = true;
+    var label = document.createElement("label");
+    label.htmlFor = "env_body";
+    label.innerHTML = " Body";
+    content.appendChild(checkbox);
+    content.appendChild(label);
+    content.appendChild(document.createElement("br"));
+    
+    // TRAJECTORY
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = "env_traj";
+    checkbox.value = "Trajectory";
+    checkbox.name = "showTraj";
+    checkbox.checked = true;
+    var label = document.createElement("label");
+    label.htmlFor = "env_traj";
+    label.innerHTML = " Show Trajectory";
+    content.appendChild(checkbox);
+    content.appendChild(label);
+    content.appendChild(document.createElement("br"));
+    
+    // SPEED GRADIENT
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = "env_grad";
+    checkbox.value = "Gradient";
+    checkbox.name = "showGrab";
+    checkbox.checked = true;
+    var label = document.createElement("label");
+    label.htmlFor = "env_grad";
+    label.innerHTML = " Speed Gradient";
+    content.appendChild(checkbox);
+    content.appendChild(label);
+    content.appendChild(document.createElement("br"));
+
+    // add button and content to the document
+    buttonsContainer.appendChild(button);
+    buttonsContainer.appendChild(content);
+
+      // add event listener to button
+    button.addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  });
+}
+
+// example data for buttons
+var objects = ["Earth", "Mars", "Jupyter", "Saturn", "Venus"];
+var missions = ["Mars Mission", "Apollo I", "Apollo II"];
+
+// call function to add buttons to collapsible
+addButtons(objects, "objects");
+addButtons(missions, "missions")
+
+function filterObjects() {
   var input, filter, ul, li, a, i;
   input = document.getElementById("myInput");
   filter = input.value.toUpperCase();
-  div = document.getElementById("myDropdown");
+  div = document.getElementById("objects");
   a = div.getElementsByTagName("button");
   c = div.getElementsByTagName("div");
   for (i = 0; i < a.length; i++) {
@@ -152,18 +272,3 @@ const animate = () => {
   requestAnimationFrame(animate);
 };
 animate();
-
-var coll = document.getElementsByClassName("collapsible");
-var i;
-
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var content = this.nextElementSibling;
-    if (content.style.display === "block") {
-      content.style.display = "none";
-    } else {
-      content.style.display = "block";
-    }
-  });
-}
