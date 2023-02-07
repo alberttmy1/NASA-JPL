@@ -15,30 +15,6 @@ function importAll(r) {
 
 const images = importAll(require.context('./assets', false, /\.(png|jpe?g|svg)$/));
 
-/*
-<!--Search Bar-->
-          <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-          <!--Example Planetary Objects-->
-          <button type="button" class="collapsible">Earth</button>
-          <div class="content" >
-            <input type="checkbox" id="env_body" name="showBody" value="Body" checked>
-            <label for="env_body"> Show Body</label><br>
-            <input type="checkbox" id="env_traj" name="showTraj" value="Trajectory" checked>
-            <label for="env_traj"> Show Trajectory</label><br>
-            <input type="checkbox" id="env_grad" name="showGrad" value="Speed Gradient">
-            <label for="env_grad"> Speed Gradient</label><br>
-          </div>
-          <button type="button" class="collapsible">Mars</button>
-          <div class="content">
-            <input type="checkbox" id="env_body" name="showBody" value="Body" checked>
-            <label for="env_body"> Show Body</label><br>
-            <input type="checkbox" id="env_traj" name="showTraj" value="Trajectory" checked>
-            <label for="env_traj"> Show Trajectory</label><br>
-            <input type="checkbox" id="env_grad" name="showGrad" value="Speed Gradient">
-            <label for="env_grad"> Speed Gradient</label><br>
-          </div>
-          */
-
 var coll = document.getElementsByClassName("collapsible");
 var i;
 
