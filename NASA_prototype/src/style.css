@@ -50,6 +50,10 @@ font-size: 15px;
     background-color: #ccc;
 }
 
+button.pinned {
+  background-color: lightblue;
+}
+
 .webgl
 {
     position: fixed;

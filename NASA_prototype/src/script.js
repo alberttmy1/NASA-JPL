@@ -38,11 +38,45 @@ function addButtons(objects, id) {
     button.innerHTML = objects;
     button.type = "button";
     button.classList.add("collapsible");
-    //buttonsContainer.appendChild(button);
 
     // create content div
     var content = document.createElement("div");
     content.classList.add("content");
+
+    // create pin checkbox
+    var pinCheckbox = document.createElement("input");
+    pinCheckbox.type = "checkbox";
+    pinCheckbox.id = "pin_checkbox";
+    pinCheckbox.checked = false;
+    pinCheckbox.classList.add("pinCheckbox");
+    pinCheckbox.addEventListener("click", function() {
+      var parent = button.parentNode;
+      var parent_content = content.parentNode;
+      if (this.checked) {
+        button.classList.add("pinned");
+      } else {
+        button.classList.remove("pinned");
+      }
+      if (this.checked){
+        // send it to the top of the list 
+        parent_content.removeChild(content);
+        parent.removeChild(button);
+        parent_content.insertBefore(content, parent_content.firstChild)
+        parent.insertBefore(button, parent.firstChild);
+      }else{
+        // send it to the bottom of the list 
+        parent_content.removeChild(content);
+        parent.removeChild(button);
+        parent.appendChild(button, parent.firstChild);
+        parent_content.appendChild(content, parent_content.firstChild)
+      }
+    });
+    var label = document.createElement("label");
+    label.htmlFor = "pin_checkbox";
+    label.innerHTML = " Pin";
+    content.appendChild(pinCheckbox);
+    content.appendChild(label);
+    content.appendChild(document.createElement("br"));
 
     // add checkboxes to content div
     // BODY
