@@ -7,6 +7,8 @@ import SceneInit from "./lib/SceneInit";
 import Planet from "./lib/Planet";
 import Rotation from "./lib/Rotation";
 
+
+
 function importAll(r) {
   let images = {};
   r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
@@ -203,7 +205,7 @@ test.animate();
 // Objects
 
 // Radius,Hight, width
-const sunGeometry = new THREE.SphereGeometry(10,40,30);
+const sunGeometry = new THREE.SphereGeometry(5);
 //const sunTexture = new THREE.TextureLoader().load('./mercury.png');
 const sunTexture = new THREE.TextureLoader().load(images['sun.jpg'].default);
 
@@ -229,53 +231,56 @@ const starTexture = new THREE.TextureLoader().load(images['galaxy.jpg'].default)
 test.scene.background = starTexture;
 
 //planets
-const mercury = new Planet(2, 16, images['mercury.png'].default);
+const mercury = new Planet(.4, 4, 0, images['mercury.png'].default);
 const mercuryMesh = mercury.getMesh();
 let mercurySystem = new THREE.Group();
 mercurySystem.add(mercuryMesh);
 
-const venus = new Planet(3, 32, images['venus.jpg'].default);
+const venus = new Planet(.9, 7, 0, images['venus.jpg'].default);
 const venusMesh = venus.getMesh();
 let venusSystem = new THREE.Group();
 venusSystem.add(venusMesh);
 
-const earth = new Planet(4, 48, images['earth.jpg'].default);
+const earth = new Planet(1, 10, 0, images['earth.jpg'].default);
 const earthMesh = earth.getMesh();
 let earthSystem = new THREE.Group();
 earthSystem.add(earthMesh);
 
-const mars = new Planet(3, 64, images['mars.jpg'].default);
+const mars = new Planet(.5, 15, 0, images['mars.jpg'].default);
 const marsMesh = mars.getMesh();
 let marsSystem = new THREE.Group();
 marsSystem.add(marsMesh);
 
-const jupiter = new Planet(6, 80, images['jupiter.jpg'].default);
+const jupiter = new Planet(11, 52, 0, images['jupiter.jpg'].default);
 const jupiterMesh = jupiter.getMesh();
 let jupiterSystem = new THREE.Group();
 jupiterSystem.add(jupiterMesh);
 
-const saturn = new Planet(6, 92, images['saturn.jpg'].default);
+const saturn = new Planet(9, 96, 0, images['saturn.jpg'].default);
 const saturnMesh = saturn.getMesh();
 let saturnSystem = new THREE.Group();
 saturnSystem.add(saturnMesh);
 
-const uranus = new Planet(4, 102, images['uranus.jpg'].default);
+const uranus = new Planet(4, 192, 0, images['uranus.jpg'].default);
 const uranusMesh = uranus.getMesh();
 let uranusSystem = new THREE.Group();
 uranusSystem.add(uranusMesh);
 
-const neptune = new Planet(4, 112, images['neptune.jpg'].default);
+const neptune = new Planet(3, 300, 0, images['neptune.jpg'].default);
 const neptuneMesh = neptune.getMesh();
 let neptuneSystem = new THREE.Group();
 neptuneSystem.add(neptuneMesh);
 
-const pluto = new Planet(4, 122, images['pluto.jpg'].default);
+const pluto = new Planet(2.86, 395, 2, images['pluto.jpg'].default);
 const plutoMesh = pluto.getMesh();
 let plutoSystem = new THREE.Group();
 plutoSystem.add(plutoMesh);
 
 //add all planaets to solarsystem
 solarSystem.add(mercurySystem,venusSystem, earthSystem, marsSystem, jupiterSystem, saturnSystem, uranusSystem, neptuneSystem, plutoSystem);
+
+//add all planaets to solarsystem
+// solarSystem.add(mercurySystem, venusSystem);
 
 
 const mercuryRotation = new Rotation(mercuryMesh);
