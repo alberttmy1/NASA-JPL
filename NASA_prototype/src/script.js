@@ -235,46 +235,55 @@ const mercury = new Planet(.4, 4, 0, images['mercury.png'].default);
 const mercuryMesh = mercury.getMesh();
 let mercurySystem = new THREE.Group();
 mercurySystem.add(mercuryMesh);
+mercurySystem.add(mercury.orbit);
 
 const venus = new Planet(.9, 7, 0, images['venus.jpg'].default);
 const venusMesh = venus.getMesh();
 let venusSystem = new THREE.Group();
 venusSystem.add(venusMesh);
+venusSystem.add(venus.orbit);
 
 const earth = new Planet(1, 10, 0, images['earth.jpg'].default);
 const earthMesh = earth.getMesh();
 let earthSystem = new THREE.Group();
 earthSystem.add(earthMesh);
+earthSystem.add(earth.orbit);
 
 const mars = new Planet(.5, 15, 0, images['mars.jpg'].default);
 const marsMesh = mars.getMesh();
 let marsSystem = new THREE.Group();
 marsSystem.add(marsMesh);
+marsSystem.add(mars.orbit);
 
 const jupiter = new Planet(11, 52, 0, images['jupiter.jpg'].default);
 const jupiterMesh = jupiter.getMesh();
 let jupiterSystem = new THREE.Group();
 jupiterSystem.add(jupiterMesh);
+jupiterSystem.add(jupiter.orbit);
 
 const saturn = new Planet(9, 96, 0, images['saturn.jpg'].default);
 const saturnMesh = saturn.getMesh();
 let saturnSystem = new THREE.Group();
 saturnSystem.add(saturnMesh);
+saturnSystem.add(saturn.orbit);
 
 const uranus = new Planet(4, 192, 0, images['uranus.jpg'].default);
 const uranusMesh = uranus.getMesh();
 let uranusSystem = new THREE.Group();
 uranusSystem.add(uranusMesh);
+uranusSystem.add(uranus.orbit);
 
 const neptune = new Planet(3, 300, 0, images['neptune.jpg'].default);
 const neptuneMesh = neptune.getMesh();
 let neptuneSystem = new THREE.Group();
 neptuneSystem.add(neptuneMesh);
+neptuneSystem.add(neptune.orbit);
 
 const pluto = new Planet(2.86, 395, 2, images['pluto.jpg'].default);
 const plutoMesh = pluto.getMesh();
 let plutoSystem = new THREE.Group();
 plutoSystem.add(plutoMesh);
+plutoSystem.add(pluto.orbit);
 
 //add all planaets to solarsystem
 solarSystem.add(mercurySystem,venusSystem, earthSystem, marsSystem, jupiterSystem, saturnSystem, uranusSystem, neptuneSystem, plutoSystem);
