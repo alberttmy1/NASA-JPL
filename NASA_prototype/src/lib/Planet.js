@@ -3,8 +3,9 @@ import * as THREE from "three";
 
 export default class Planet {
   constructor(radius, positionX, positionZ, textureFile) {
-    this.radius = radius;
-    this.positionX = positionX;
+    //1000 times is just for visibility
+    this.radius = this.toAU(radius) * 1000;
+    this.positionX = this.toAU(positionX);
     //this.positionY = positionY
     this.positionZ = positionZ;
     this.textureFile = textureFile;
@@ -12,6 +13,10 @@ export default class Planet {
     this.orbit = this.createOrbit();
     //this.setOrbitInclination();
   }
+
+  toAU(miles){
+    return miles * 1.08 * (10 ** -8);
+  };
 
   getMesh() {
     if (this.mesh === undefined || this.mesh === null) {
