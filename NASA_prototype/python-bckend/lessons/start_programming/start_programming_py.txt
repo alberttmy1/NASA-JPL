@@ -1,0 +1,133 @@
+ 
+Basics, Building SPICE Applications (Python)
+===========================================================================
+ 
+   October 18, 2022
+ 
+ 
+Note About HTML Links
+--------------------------------------------------------
+ 
+   The HTML version of this lesson contains links pointing to various HTML
+   documents provided with the Toolkit. All of these links are relative
+   and, in order to function, require this document to be in a certain
+   location in the Toolkit HTML documentation directory tree.
+ 
+   In order for the links to be resolved, if not done already by installing
+   the lessons package under the Toolkit's ``doc/html'' directory, create a
+   subdirectory called ``lessons'' under the ``doc/html'' directory of the
+   ``cspice/'' tree and copy this document to that subdirectory before
+   loading it into a Web browser.
+ 
+ 
+Environment Set-up
+--------------------------------------------------------
+ 
+   In order to install SpiceyPy, using pip, first install install and or
+   update pip, setuptools, wheel, and numpy:
+ 
+      $ pip install -U pip setuptools wheel
+      $ pip install -U numpy
+ 
+   Then install SpiceyPy:
+ 
+      $ pip install spiceypy
+ 
+   Using anaconda, miniconda or conda:
+ 
+      $ conda config --add channels conda-forge
+      $ conda install spiceypy
+ 
+   The instructions above are for SpiceyPy 5.1.2. Instructions for earlier
+   and later SpiceyPy versions may be different. Please refer to the
+   SpiceyPy documentation for additional details.
+ 
+ 
+Confirm that Python can access SpiceyPy
+--------------------------------------------------------
+ 
+   Run pip list in order to get a list of the third party libraries that
+   are currently available to your Python installation:
+ 
+         $ pip list --format=columns
+         Package    Version
+         ---------- -------
+         ...
+         numpy      1.23.3
+         ...
+         pip        22.2.2
+         ...
+         setuptools 65.4.1
+         ...
+         spiceypy   5.1.2
+         ...
+         wheel      0.37.1
+         ...
+ 
+ 
+A simple example program
+--------------------------------------------------------
+ 
+   This script calls the spiceypy function 'tkvrsn' and outputs the return
+   value.
+ 
+   File tk_ver.py:
+ 
+      from __future__ import print_function
+      import spiceypy
+ 
+      def print_ver():
+              """Prints the TOOLKIT version
+              """
+              print(spiceypy.tkvrsn('TOOLKIT'))
+ 
+      if __name__ == '__main__':
+              print_ver()
+ 
+   From the command line, execute the function:
+ 
+      $ python tk_ver.py
+      CSPICE_N0067
+ 
+   From Python, execute the function:
+ 
+      $ python
+      >>> import tkvrsn
+      >>> tkvrsn.print_ver()
+      CSPICE_N0067
+ 
+ 
+SpiceyPy Documentation
+--------------------------------------------------------
+ 
+   The current version of SpiceyPy does not provide extensive
+   documentation, but there are several ways to navigate your way through
+   the Python version of the toolkit. One simple way is to use the standard
+   Python mechanisms. All interfaces implemented in SpiceyPy can be listed
+   using the standard built-in function dir(), which returns an
+   alphabetized list of names comprising (among) other things, the API
+   names. If you need to get additional information about an API
+   parameters, the standard built-in function help() could be used:
+ 
+      >>> import spiceypy
+      >>> help(spiceypy.tkvrsn)
+ 
+   which produces
+ 
+      Help on function tkvrsn in module spiceypy.spiceypy:
+ 
+      tkvrsn(item: str) -> str
+          Given an item such as the Toolkit or an entry point name, return
+          the latest version string.
+ 
+          https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/
+          tkvrsn_c.html
+ 
+          :param item: Item for which a version string is desired.
+          :return: the latest version string.
+ 
+   As indicated in the help on the function, the complete documentation is
+   available on the CSPICE toolkit docs. Therefore it is recommended to
+   have the CSPICE toolkit installed locally in order to access its
+   documentation offline.
+ 

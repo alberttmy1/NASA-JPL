@@ -13,6 +13,31 @@ function importAll(r) {
   return images;
 }
 
+
+
+
+function spice(){
+    console.log("spice function entered")
+    $.ajax({
+      url:'http://127.0.0.1:5000/calc ',
+      type: 'GET',
+      dataType:'JSON',
+      METAKR:'getsa.tm',
+      target:'EARTH',
+      obs:'CASSINI',
+      utctim:'2004 jun 11 19:32:00',
+      success:function(data){
+        alert(data.x + " "+ data.y + " "+ data.z);
+      },
+      error:function(xhr,status,error){
+        var errorMessage = xhr.status + ':' + xhr.statusText
+        alert('Error - ' + errorMessage);
+      }
+    }); 
+}
+window.spice = spice;
+
+
 const images = importAll(require.context('./assets', false, /\.(png|jpe?g|svg)$/));
 
 var coll = document.getElementsByClassName("collapsible");
