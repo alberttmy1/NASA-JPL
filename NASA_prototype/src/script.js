@@ -18,8 +18,9 @@ function importAll(r) {
 
 
 
-function spice(){
+function spice(target_, obs_, utctim_ ){
     console.log("spice function entered")
+    var newCoordinates = []; //new coordinates
     $.ajax({
       url:'http://127.0.0.1:5000/calc ',
       type: 'GET',
@@ -30,14 +31,44 @@ function spice(){
       utctim:'2004 jun 11 19:32:00',
       success:function(data){
         alert(data.x + " "+ data.y + " "+ data.z);
+        newCoordinates[0] = data.x;
+        newCoordinates[1] = data.y;
+        newCoordinates[2] = data.z;
       },
       error:function(xhr,status,error){
         var errorMessage = xhr.status + ':' + xhr.statusText
         alert('Error - ' + errorMessage);
       }
     }); 
+    return newCoordinates;
 }
 window.spice = spice;
+
+function spice_orbit(){
+    console.log("spice function entered")
+    var newCoordinates = []; //new coordinates
+    $.ajax({
+      url:'http://127.0.0.1:5000/calc ',
+      type: 'GET',
+      dataType:'JSON',
+      METAKR:'getsa.tm',
+      target:'EARTH',
+      obs:'CASSINI',
+      utctim:'2004 jun 11 19:32:00',
+      success:function(data){
+        alert(data.x + " "+ data.y + " "+ data.z);
+        newCoordinates[0] = data.x;
+        newCoordinates[1] = data.y;
+        newCoordinates[2] = data.z;
+      },
+      error:function(xhr,status,error){
+        var errorMessage = xhr.status + ':' + xhr.statusText
+        alert('Error - ' + errorMessage);
+      }
+    }); 
+    return newCoordinates;
+}
+window.spice_orbit = spice_orbit;
 
 
 const images = importAll(require.context('./assets', false, /\.(png|jpe?g|svg)$/));
@@ -270,7 +301,9 @@ let venusSystem = new THREE.Group();
 venusSystem.add(venusMesh);
 venusSystem.add(venus.orbit);
 
-const earth = new Planet(3958.8, 91940000, 0, images['earth.jpg'].default);
+var newCoordinates = spice_orbit();
+const earth = new Planet(3958.8, newCoordinates[0], newCoordinates[2], images['earth.jpg'].default);
+console.log(newCoordinates);
 const earthMesh = earth.getMesh();
 let earthSystem = new THREE.Group();
 earthSystem.add(earthMesh);
