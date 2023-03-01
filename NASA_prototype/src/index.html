@@ -17,7 +17,17 @@
     </div>
 
     <div class="sidenav">
-      <button type="button" id="spice_test" onclick="spice()">Test Spice </button>
+      <button type="button" class = "collapsible" id="spice_test" >Test Spice </button>
+      <div class="content">
+        <form class="" action="spice()" method="post">
+          <label for="METAKR">Kernel Name:</label><br>
+          <input type="text" id="METAKR" name="METAKR"><br>
+          <label for="target">Target:</label><br>
+          <input type="text" id="Target" name="Target">
+          <button type="button" id ="spice_test" onclick="spice()">Send</button>
+        </form> 
+      </div>
+
       <!--Environment-->
       <button type="button"  class="collapsible">Environment</button>
 

@@ -22,8 +22,8 @@ def after_request(response):
   response.headers.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
   return response
 
+#make different types of calls for different spice calcs(rotation vector, positioning)
 class SpiceCalc(Resource):
-
     def get(self):
         # self.send_header('Access-Control-Allow-Origin', '*')
         # SimpleHTTPRequestHandler.end_headers(self)
@@ -36,14 +36,14 @@ class SpiceCalc(Resource):
 
         parser = reqparse.RequestParser()  # initialize
 
-        # parser.add_argument('METAKR', required=True)  # add args
-        # parser.add_argument('target', required=True)
-        # parser.add_argument('obs', required=True)
-        # parser.add_argument('utctim', required=True)
+        parser.add_argument('METAKR', required=True)  # add args
+        parser.add_argument('target', required=True)
+        parser.add_argument('obs', required=True)
+        parser.add_argument('utctim', required=True)
         print("arguments sent")
-        #args = parser.parse_args()
-        print("arguments parsed")
-
+        # args = parser.parse_args()
+        # print("arguments parsed")
+        #
         # METAKR = args['METAKR']
         # target = args['target']
         # obs = args['obs']
@@ -129,7 +129,7 @@ class SpiceCalc(Resource):
 
 
 
-        spiceypy.unload( METAKR )
+        spiceypy.unload(METAKR)
 
         return jsonify({"x":return_pos[0], "y":return_pos[1], "z":return_pos[2] ,"dist":dist})
 
