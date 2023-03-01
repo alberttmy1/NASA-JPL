@@ -14,8 +14,8 @@ export default class Planet {
     //this.setOrbitInclination();
   }
 
-  toAU(miles){
-    return miles * 1.08 * (10 ** -8);
+  toAU(km){
+    return km * 6.6845871226706 * (10 ** -9);
   };
 
   getMesh() {
