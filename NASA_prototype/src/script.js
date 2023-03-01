@@ -205,28 +205,45 @@ test.animate();
 // Objects
 
 // Radius,Hight, width
-//const sunGeometry = new THREE.SphereGeometry(0.00465047);
+const sunGeometry = new THREE.SphereGeometry(0.00465047);
 //scaled up sun for visiblity
-const sunGeometry = new THREE.SphereGeometry(0.265047);
-//const sunTexture = new THREE.TextureLoader().load('./mercury.png');
+//const sunGeometry = new THREE.SphereGeometry(0.265047);
 const sunTexture = new THREE.TextureLoader().load(images['sun.jpg'].default);
-
-// const sunGeometry = new THREE.BoxGeometry(8,8,8)
-
 // Materials
-
-// const sunMaterial = new THREE.MeshStandardMaterial();
 const sunMaterial = new THREE.MeshBasicMaterial({map: sunTexture});
-// const sunMaterial = new THREE.MeshBasicMaterial();
-// sunMaterial.color = new THREE.Color(0xff0000);
 
+//sun halo, uses code from planet class, can be cleaned up later
+var resolution = 15 * 50; // segments in the line
+var length = 360 / resolution;
+var orbitLine = new THREE.BufferGeometry();
+var material = new THREE.LineBasicMaterial({
+  color: 'gold',
+  linewidth: 1,
+  fog: true
+});
+// Build the orbit line
+const positions = [];
+for (var i = 0; i <= resolution; i++) {
+  var segment = (i * length) * Math.PI / 180;
+  var orbitAmplitude = 0.00465047 * 10;
+
+  positions.push(
+      Math.cos(segment) * orbitAmplitude,
+      0,
+      Math.sin(segment) * orbitAmplitude
+  );
+}
+orbitLine.setAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
+orbitLine.computeBoundingSphere();
+var sunHalo = new THREE.Line(orbitLine, material);
+sunHalo.position.set(0, 0, 0);
 
 // Mesh
 
-// const sunMesh = new THREE.Mesh(sunGeometry,sunMaterial)
 const sunMesh = new THREE.Mesh(sunGeometry,sunMaterial);
 const solarSystem = new THREE.Group();
 solarSystem.add(sunMesh);
+solarSystem.add(sunHalo);
 test.scene.add(solarSystem);
 
 const starTexture = new THREE.TextureLoader().load(images['galaxy.jpg'].default);
@@ -238,54 +255,63 @@ const mercuryMesh = mercury.getMesh();
 let mercurySystem = new THREE.Group();
 mercurySystem.add(mercuryMesh);
 mercurySystem.add(mercury.orbit);
+mercurySystem.add(mercury.halo);
 
 const venus = new Planet(6052, 108200000, 0, images['venus.jpg'].default);
 const venusMesh = venus.getMesh();
 let venusSystem = new THREE.Group();
 venusSystem.add(venusMesh);
 venusSystem.add(venus.orbit);
+venusSystem.add(venus.halo);
 
 const earth = new Planet(6378, 149600000, 0, images['earth.jpg'].default);
 const earthMesh = earth.getMesh();
 let earthSystem = new THREE.Group();
 earthSystem.add(earthMesh);
 earthSystem.add(earth.orbit);
+earthSystem.add(earth.halo);
 
 const mars = new Planet(3396, 227900000, 0, images['mars.jpg'].default);
 const marsMesh = mars.getMesh();
 let marsSystem = new THREE.Group();
 marsSystem.add(marsMesh);
 marsSystem.add(mars.orbit);
+marsSystem.add(mars.halo);
 
 const jupiter = new Planet(71492, 778600000, 0, images['jupiter.jpg'].default);
 const jupiterMesh = jupiter.getMesh();
 let jupiterSystem = new THREE.Group();
 jupiterSystem.add(jupiterMesh);
 jupiterSystem.add(jupiter.orbit);
+jupiterSystem.add(jupiter.halo);
 
 const saturn = new Planet(60268, 1433500000, 0, images['saturn.jpg'].default);
 const saturnMesh = saturn.getMesh();
 let saturnSystem = new THREE.Group();
 saturnSystem.add(saturnMesh);
 saturnSystem.add(saturn.orbit);
+saturnSystem.add(saturn.halo);
 
 const uranus = new Planet(25559, 2872500000, 0, images['uranus.jpg'].default);
 const uranusMesh = uranus.getMesh();
 let uranusSystem = new THREE.Group();
 uranusSystem.add(uranusMesh);
 uranusSystem.add(uranus.orbit);
+uranusSystem.add(uranus.halo);
 
 const neptune = new Planet(24764, 4495100000, 0, images['neptune.jpg'].default);
 const neptuneMesh = neptune.getMesh();
 let neptuneSystem = new THREE.Group();
 neptuneSystem.add(neptuneMesh);
 neptuneSystem.add(neptune.orbit);
+neptuneSystem.add(neptune.halo);
 
 const pluto = new Planet(1188.3, 5906380000, 2, images['pluto.jpg'].default);
 const plutoMesh = pluto.getMesh();
 let plutoSystem = new THREE.Group();
 plutoSystem.add(plutoMesh);
 plutoSystem.add(pluto.orbit);
+plutoSystem.add(pluto.halo);
 
 //add all planaets to solarsystem
 solarSystem.add(mercurySystem,venusSystem, earthSystem, marsSystem, jupiterSystem, saturnSystem, uranusSystem, neptuneSystem, plutoSystem);
