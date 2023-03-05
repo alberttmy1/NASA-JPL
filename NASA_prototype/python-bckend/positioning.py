@@ -8,50 +8,36 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 from flask_restful import Resource, Api, reqparse
 
 import spiceypy
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 app = Flask(__name__)
 api = Api(app)
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 CORS(app)
 
 @app.after_request
 def after_request(response):
+
   response.headers.set('Access-Control-Allow-Origin', '*')
   response.headers.set('Access-Control-Allow-Headers', 'Content-Type,Authorization')
   response.headers.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+  print("CORS")
   return response
 
 #make different types of calls for different spice calcs(rotation vector, positioning)
 class SpiceCalc(Resource):
+
     def get(self):
-        # self.send_header('Access-Control-Allow-Origin', '*')
-        # SimpleHTTPRequestHandler.end_headers(self)
+
         print("init post")
-        #
-        # Local parameters
-        #
 
 
-
-        parser = reqparse.RequestParser()  # initialize
-
-        parser.add_argument('METAKR', required=True)  # add args
-        parser.add_argument('target', required=True)
-        parser.add_argument('obs', required=True)
-        parser.add_argument('utctim', required=True)
+        target = request.args.get('planet')
+        #target = "EARTH"
         print("arguments sent")
-        # args = parser.parse_args()
-        # print("arguments parsed")
-        #
-        # METAKR = args['METAKR']
-        # target = args['target']
-        # obs = args['obs']
-        # utctim = args['utctim']
 
         METAKR = 'getsa.tm'
-        target = 'EARTH'
-        obs='CASSINI'
+        obs='SUN'
         utctim = "2004 jun 11 19:32:00"
         print(METAKR)
         print(target)
@@ -67,10 +53,6 @@ class SpiceCalc(Resource):
         #
         spiceypy.furnsh( METAKR )
 
-        #
-        #Prompt the user for the input time string.
-        #
-        #utctim = input( 'Input UTC Time: ' )
 
         print( 'Converting UTC Time: {:s}'.format(utctim)  )
 
@@ -82,17 +64,11 @@ class SpiceCalc(Resource):
         print( '   ET seconds past J2000: {:16.3f}'.format(et) )
 
 
-        #
-        # Compute the apparent position of Earth as seen from
-        # CASSINI in the J2000 frame.  Note: We could have
-        # continued using spkezr and simply ignored the
-        # velocity components.
-        #
         [return_pos, ltime] = spiceypy.spkpos( target, et,        'J2000',
                                         'LT+S',  obs,         )
 
         print( '   Apparent position of Earth as '
-               'seen from CASSINI in the J2000\n'
+               'seen from Sun in the J2000\n'
                '      frame (km):'                )
         print( '      X = {:16.3f}'.format(return_pos[0])  )
         print( '      Y = {:16.3f}'.format(return_pos[1])  )
@@ -102,7 +78,7 @@ class SpiceCalc(Resource):
         # We need only display LTIME, as it is precisely the
         # light time in which we are interested.
         #
-        print( '   One way light time between CASSINI and '
+        print( '   One way light time between Sun and '
                'the apparent position\n'
                '      of Earth (seconds):'
                ' {:16.3f}'.format(ltime) )
@@ -136,4 +112,4 @@ class SpiceCalc(Resource):
 api.add_resource(SpiceCalc, '/calc')
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)
