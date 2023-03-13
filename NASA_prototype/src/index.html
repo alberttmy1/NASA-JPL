@@ -6,7 +6,9 @@
     <title>ThreeJS Starter</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script defer src="script.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="script.js"></script>
+    <!-- <script onLoad = "load()" type="text/javascript" src = "script.js"></script> -->
 </head>
 <body>
     <canvas class="webgl"></canvas>
@@ -15,8 +17,20 @@
     </div>
 
     <div class="sidenav">
+      <button type="button" class = "collapsible" id="spice_test" >Test Spice </button>
+      <div class="content">
+        <form class="" action="spice()" method="post">
+          <label for="METAKR">Kernel Name:</label><br>
+          <input type="text" id="METAKR" name="METAKR"><br>
+          <label for="target">Target:</label><br>
+          <input type="text" id="Target" name="Target">
+          <button type="button" id ="spice_test" onclick="spice()">Send</button>
+        </form> 
+      </div>
+
       <!--Environment-->
       <button type="button"  class="collapsible">Environment</button>
+
       <div class="content">
         <input type="checkbox" id="env_body" name="showBody" value="Body" checked>
         <label for="env_body"> Show Solar System</label><br>

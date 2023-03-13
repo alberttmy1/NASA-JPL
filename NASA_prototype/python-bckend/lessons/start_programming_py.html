@@ -1,0 +1,209 @@
+<HTML>
+<HEAD>
+<TITLE> Basics, Building SPICE Applications (Python) </TITLE>
+</HEAD>
+
+<BODY style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+
+<A NAME="top"></A>
+
+<TABLE STYLE="text-align: left; margin-left: auto; margin-right: auto; width: 800px;" BORDER="0" CELLPADDING="5" CELLSPACING="2">
+<TBODY>
+<TR>
+  <TD STYLE="background-color: rgb(153, 153, 153); vertical-align: middle; text-align: center;">
+  <DIV ALIGN="right">
+    <SMALL><SMALL><a href="../index.html">Main Page</a></SMALL></SMALL>
+  </DIV>
+  <B>Basics, Building SPICE Applications (Python)</B> </TD>
+</TR>
+<TR>
+  <TD STYLE="vertical-align: top;">
+
+<H2> Table of Contents
+</H2>
+
+<PRE>
+
+   <A HREF="#Basics, Building SPICE Applications Python">Basics, Building SPICE Applications (Python)</A>
+      <A HREF="#Note About HTML Links">Note About HTML Links</A>
+      <A HREF="#Environment Set-up">Environment Set-up</A>
+      <A HREF="#Confirm that Python can access SpiceyPy">Confirm that Python can access SpiceyPy</A>
+      <A HREF="#A simple example program">A simple example program</A>
+      <A HREF="#SpiceyPy Documentation">SpiceyPy Documentation</A>
+
+</PRE>
+
+<HR SIZE=3 NOSHADE>
+
+<BR><BR>
+<A NAME="Basics, Building SPICE Applications Python"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H1> Basics, Building SPICE Applications (Python)
+</H1><HR SIZE=3 NOSHADE><P><BR><BR><BR>
+   October 18, 2022
+<P>
+ 
+<BR><BR>
+<A NAME="Note About HTML Links"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Note About HTML Links
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The HTML version of this lesson contains links pointing to various HTML
+   documents provided with the Toolkit. All of these links are relative
+   and, in order to function, require this document to be in a certain
+   location in the Toolkit HTML documentation directory tree.
+<P>
+ 
+   In order for the links to be resolved, if not done already by installing
+   the lessons package under the Toolkit's ``doc/html'' directory, create a
+   subdirectory called ``lessons'' under the ``doc/html'' directory of the
+   ``cspice/'' tree and copy this document to that subdirectory before
+   loading it into a Web browser.
+<P>
+ 
+<BR><BR>
+<A NAME="Environment Set-up"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Environment Set-up
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   In order to install SpiceyPy, using pip, first install install and or
+   update pip, setuptools, wheel, and numpy:
+<P>
+ 
+<PRE>
+   $ pip install -U pip setuptools wheel
+   $ pip install -U numpy
+</PRE>
+   Then install SpiceyPy:
+<P>
+ 
+<PRE>
+   $ pip install spiceypy
+</PRE>
+   Using anaconda, miniconda or conda:
+<P>
+ 
+<PRE>
+   $ conda config --add channels conda-forge
+   $ conda install spiceypy
+</PRE>
+   The instructions above are for SpiceyPy 5.1.2. Instructions for earlier
+   and later SpiceyPy versions may be different. Please refer to the
+   SpiceyPy documentation for additional details.
+<P>
+ 
+<BR><BR>
+<A NAME="Confirm that Python can access SpiceyPy"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> Confirm that Python can access SpiceyPy
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   Run pip list in order to get a list of the third party libraries that
+   are currently available to your Python installation:
+<P>
+ 
+<PRE>
+      $ pip list --format=columns
+      Package    Version
+      ---------- -------
+      ...
+      numpy      1.23.3
+      ...
+      pip        22.2.2
+      ...
+      setuptools 65.4.1
+      ...
+      spiceypy   5.1.2
+      ...
+      wheel      0.37.1
+      ...
+</PRE>
+<BR><BR>
+<A NAME="A simple example program"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> A simple example program
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   This script calls the spiceypy function 'tkvrsn' and outputs the return
+   value.
+<P>
+ 
+   File tk_ver.py:
+<P>
+ 
+<PRE>
+   from __future__ import print_function
+   import spiceypy
+ 
+   def print_ver():
+           """Prints the TOOLKIT version
+           """
+           print(<a href="https://spiceypy.readthedocs.io/en/main/documentation.html#spiceypy.spiceypy.tkvrsn">spiceypy.tkvrsn</a>('TOOLKIT'))
+ 
+   if __name__ == '__main__':
+           print_ver()
+</PRE>
+   From the command line, execute the function:
+<P>
+ 
+<PRE>
+   $ python tk_ver.py
+   CSPICE_N0067
+</PRE>
+   From Python, execute the function:
+<P>
+ 
+<PRE>
+   $ python
+   &gt;&gt;&gt; import tkvrsn
+   &gt;&gt;&gt; tkvrsn.print_ver()
+   CSPICE_N0067
+</PRE>
+<BR><BR>
+<A NAME="SpiceyPy Documentation"></A>
+<p align="right"><a href="#top"><small>Top</small></a></p>
+<H2> SpiceyPy Documentation
+</H2><HR ALIGN="LEFT" WIDTH=50% ><P><BR><BR>
+   The current version of SpiceyPy does not provide extensive
+   documentation, but there are several ways to navigate your way through
+   the Python version of the toolkit. One simple way is to use the standard
+   Python mechanisms. All interfaces implemented in SpiceyPy can be listed
+   using the standard built-in function dir(), which returns an
+   alphabetized list of names comprising (among) other things, the API
+   names. If you need to get additional information about an API
+   parameters, the standard built-in function help() could be used:
+<P>
+ 
+<PRE>
+   &gt;&gt;&gt; import spiceypy
+   &gt;&gt;&gt; help(<a href="https://spiceypy.readthedocs.io/en/main/documentation.html#spiceypy.spiceypy.tkvrsn">spiceypy.tkvrsn</a>)
+</PRE>
+   which produces
+<P>
+ 
+<PRE>
+   Help on function tkvrsn in module spiceypy.spiceypy:
+ 
+   tkvrsn(item: str) -&gt; str
+       Given an item such as the Toolkit or an entry point name, return
+       the latest version string.
+ 
+       https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/
+       tkvrsn_c.html
+ 
+       :param item: Item for which a version string is desired.
+       :return: the latest version string.
+</PRE>
+   As indicated in the help on the function, the complete documentation is
+   available on the CSPICE toolkit docs. Therefore it is recommended to
+   have the CSPICE toolkit installed locally in order to access its
+   documentation offline.
+<P>
+ 
+
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+
+</BODY>
+
+</HTML>
