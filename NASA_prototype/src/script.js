@@ -77,6 +77,30 @@ function spice_orbit(target){
 }
 window.spice_orbit = spice_orbit;
 
+function spice_form(){
+  console.log("spice orbit function entered")
+  var newCoordinates = []; //new coordinates
+  $.ajax({
+    url:'https://spice-api.herokuapp.com/orbits?planet='+document.getElementById("Target").value,
+    type: 'GET',
+    dataType:'JSON',
+    crossDomain: true,
+    planet:document.getElementById("Target").value,
+    success:function(data){
+      alert("FORM FUNCTION: "+document.getElementById("Target").value+" orbit updated: " + data.x +", " + data.y +", "+ data.z);
+      newCoordinates[0] = data.x;
+      newCoordinates[1] = data.y;
+      newCoordinates[2] = data.z;
+    },
+    error:function(xhr,status,error){
+      var errorMessage = xhr.status + ':' + xhr.statusText
+      alert('Error - ' + errorMessage);
+    }
+  }); 
+  return newCoordinates;
+}
+window.spice_form = spice_form;
+
 
 const images = importAll(require.context('./assets', false, /\.(png|jpe?g|svg)$/));
 

@@ -19,12 +19,12 @@
     <div class="sidenav">
       <button type="button" class = "collapsible" id="spice_test" >Test Spice </button>
       <div class="content">
-        <form class="" action="spice()" method="post">
-          <label for="METAKR">Kernel Name:</label><br>
-          <input type="text" id="METAKR" name="METAKR"><br>
+        <form id="model_update" class="" action="spice()" method="post">
           <label for="target">Target:</label><br>
           <input type="text" id="Target" name="Target">
-          <button type="button" id ="spice_test" onclick="spice()">Send</button>
+          <label for="target">Time:</label><br>
+          <input type="text" id="Time" name="Time">
+          <button type="button" id ="spice_test" onclick="spice_form()">Send</button>
         </form> 
       </div>
 
