@@ -218,43 +218,29 @@ var missions = ["Mars Mission", "Apollo I", "Apollo II"];
 addButtons(objects, "objects");
 addButtons(missions, "missions");
 
-function filterObjects() {
-  var input, filter, ul, li, a, i;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  div = document.getElementById("objects");
-  a = div.getElementsByTagName("button");
-  c = div.getElementsByTagName("div");
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      a[i].style.display = "";
-      c[i].style.display = "";
-    } else {
-      a[i].style.display = "none";
-      c[i].style.display = "none";
-    }
-  }
-}
+const searchObjects = document.getElementById("search-objects");
+const searchObjectsPopup = document.getElementById("search-objects-popup");
+const closeObjectsBtn = document.getElementById("close-objects-btn");
 
-function filterFunction2() {
-  var input, filter, ul, li, a, i;
-  input = document.getElementById("myInput2");
-  filter = input.value.toUpperCase();
-  div = document.getElementById("myDropdown2");
-  a = div.getElementsByTagName("button");
-  c = div.getElementsByTagName("div");
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      a[i].style.display = "";
-      c[i].style.display = "";
-    } else {
-      a[i].style.display = "none";
-      c[i].style.display = "none";
-    }
-  }
-}
+searchObjects.addEventListener("click", function() {
+  searchObjectsPopup.style.display = "block";
+});
+
+closeObjectsBtn.addEventListener("click", function() {
+  searchObjectsPopup.style.display = "none";
+});
+
+const searchMissions = document.getElementById("search-missions");
+const searchMissionsPopup = document.getElementById("search-missions-popup");
+const closeMissionsBtn = document.getElementById("close-missions-btn");
+
+searchMissions.addEventListener("click", function() {
+  searchMissionsPopup.style.display = "block";
+});
+
+closeMissionsBtn.addEventListener("click", function() {
+  searchMissionsPopup.style.display = "none";
+});
 
 // Debug
 const gui = new dat.GUI()

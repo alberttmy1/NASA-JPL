@@ -40,25 +40,62 @@
         <label for="env_grad"> Show All Speed Gradients</label><br>
       </div>
       <!--Objects-->
-      <button type="button" class="collapsible">Objects</button>
+      <button type="button" id="missions-btn" class="collapsible">
+        Objects 
+        <div id="search-objects">
+          <i class="fa fa-search"></i>
+        </div>
+      </button>
       <div class="content">
         <div id="objects">
-          <input type="text" placeholder="Search.." id="myInput" onkeyup="filterObjects()">
+          <input type="text" placeholder="Search.." id="objectInput" onkeyup="filterObjects()">
 
         </div>
       </div>
       <!--Trajectories-->
-      <button type ="button" class="collapsible">Missions</button>
+      <button type="button" id="missions-btn" class="collapsible">Missions 
+        <div id="search-missions">
+          <i class="fa fa-search"></i>
+        </div>  
+      </button>
       <div class="content">
         <div id="missions">
           <!--Search Bar-->
-          <input type="text" placeholder="Search.." id="myInput2" onkeyup="filterFunction2()">
+          <input type="text" placeholder="Search.." id="missionInput" onkeyup="filterMissions()">
           <!--Example Planetary Objects-->
           
         </div>
       </div>
+
     </div>
     
+    <div id="search-objects-popup">
+      <div id="search-objects-header">
+        <span>Search Objects</span>
+        <span id="close-objects-btn">&times;</span>
+      </div>
+      <div id="search-objects-input">
+        <input type="text" placeholder="Enter search text...">
+        <button>Search</button>
+      </div>
+      <div id="search-objects-results">
+        <!-- Search results will be displayed here -->
+      </div>
+    </div>
+
+    <div id="search-missions-popup">
+      <div id="search-mission-header">
+        <span>Search Missions</span>
+        <span id="close-missions-btn">&times;</span>
+      </div>
+      <div id="search-missions-input">
+        <input type="text" placeholder="Enter search text...">
+        <button>Search</button>
+      </div>
+      <div id="search-missons-results">
+        <!-- Search results will be displayed here -->
+      </div>
+    </div>
     <!--Sidebar-->
   </body>
 </html>
