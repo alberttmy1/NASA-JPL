@@ -42,60 +42,38 @@
       <!--Objects-->
       <button type="button" id="missions-btn" class="collapsible">
         Objects 
-        <div id="search-objects">
-          <i class="fa fa-search"></i>
-        </div>
       </button>
       <div class="content">
         <div id="objects">
-          <input type="text" placeholder="Search.." id="objectInput" onkeyup="filterObjects()">
+          <button type="button"  class="collapsible">Pinned Objects</button>
+          <div class="content" id = "pinned_objects">
+          </div>
 
+          <button type="button"  class="collapsible">Objects Library</button>
+          <div class="content" id = "object_library">
+            <input type="text" placeholder="Search Objects.." id="objectInput" onkeyup="searchObjects()">
+          </div>
         </div>
       </div>
       <!--Trajectories-->
       <button type="button" id="missions-btn" class="collapsible">Missions 
-        <div id="search-missions">
-          <i class="fa fa-search"></i>
-        </div>  
       </button>
       <div class="content">
         <div id="missions">
-          <!--Search Bar-->
-          <input type="text" placeholder="Search.." id="missionInput" onkeyup="filterMissions()">
-          <!--Example Planetary Objects-->
+          <button type="button"  class="collapsible">Pinned Missions</button>
+          <div class="content" id = "pinned_missions">
+          </div>
+
+          <button type="button"  class="collapsible">Missions Library</button>
+          <div class="content" id = "mission_library">
+            <input type="text" placeholder="Search Missons.." id="missionInput" onkeyup="searchMissions()">
+          </div>
           
         </div>
       </div>
 
     </div>
-    
-    <div id="search-objects-popup">
-      <div id="search-objects-header">
-        <span>Search Objects</span>
-        <span id="close-objects-btn">&times;</span>
-      </div>
-      <div id="search-objects-input">
-        <input type="text" placeholder="Enter search text...">
-        <button>Search</button>
-      </div>
-      <div id="search-objects-results">
-        <!-- Search results will be displayed here -->
-      </div>
-    </div>
-
-    <div id="search-missions-popup">
-      <div id="search-mission-header">
-        <span>Search Missions</span>
-        <span id="close-missions-btn">&times;</span>
-      </div>
-      <div id="search-missions-input">
-        <input type="text" placeholder="Enter search text...">
-        <button>Search</button>
-      </div>
-      <div id="search-missons-results">
-        <!-- Search results will be displayed here -->
-      </div>
-    </div>
     <!--Sidebar-->
+    <script src="functions.js"></script>
   </body>
 </html>
