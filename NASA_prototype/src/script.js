@@ -59,6 +59,7 @@ function ajax_call(target){
   return new Promise((resolve,reject) => {
     $.ajax({
       url:'https://spice-api.herokuapp.com/orbits?planet='+target,
+      // TODO: https://stackoverflow.com/questions/2019608/pass-entire-form-as-data-in-jquery-ajax-function
       type: 'GET',
       dataType:'JSON',
       crossDomain: true,
@@ -87,8 +88,10 @@ window.spice_orbit = spice_orbit;
 function spice_form(){
   console.log("spice orbit function entered")
   var newCoordinates = []; //new coordinates
+  var data = $("model_update").serialize()
+  console.log(data)
   $.ajax({
-    url:'https://spice-api.herokuapp.com/orbits?planet='+document.getElementById("Target").value,
+    url:'https://spice-api.herokuapp.com/orbits?planet='+data,
     type: 'GET',
     dataType:'JSON',
     crossDomain: true,

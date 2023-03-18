@@ -17,14 +17,15 @@
     </div>
 
     <div class="sidenav">
-      <button type="button" class = "collapsible" id="spice_test" >Test Spice </button>
+      <button type="button" class = "collapsible" id="spice_form" >Test Spice </button>
       <div class="content">
         <form id="model_update" class="" action="spice()" method="post">
           <label for="target">Target:</label><br>
           <input type="text" id="Target" name="Target">
           <label for="target">Time:</label><br>
           <input type="text" id="Time" name="Time">
-          <button type="button" id ="spice_test" onclick="spice_form()">Send</button>
+          <!-- TODO:https://stackoverflow.com/questions/2019608/pass-entire-form-as-data-in-jquery-ajax-function -->
+          <button type="submit" id ="spice_form_submit" onclick="spice_form()">Send</button>
         </form> 
       </div>
 

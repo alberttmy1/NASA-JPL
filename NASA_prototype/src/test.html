@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("button").click(function(){
+    var str = $("div").text($("form").serialize());
+    
+  });
+});
+</script>
+</head>
+<body>
+
+<form id="help"action="">
+  Planet: <input type="text" name="Planet" value="Mars"><br>
+  Time: <input type="text" name="Time" value="12:00"><br>
+</form>
+
+<button>Serialize form values</button>
+
+<div></div>
+
+</body>
+</html>
