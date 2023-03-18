@@ -40,25 +40,40 @@
         <label for="env_grad"> Show All Speed Gradients</label><br>
       </div>
       <!--Objects-->
-      <button type="button" class="collapsible">Objects</button>
+      <button type="button" id="missions-btn" class="collapsible">
+        Objects 
+      </button>
       <div class="content">
         <div id="objects">
-          <input type="text" placeholder="Search.." id="myInput" onkeyup="filterObjects()">
+          <button type="button"  class="collapsible">Pinned Objects</button>
+          <div class="content" id = "pinned_objects">
+          </div>
 
+          <button type="button"  class="collapsible">Objects Library</button>
+          <div class="content" id = "object_library">
+            <input type="text" placeholder="Search Objects.." id="objectInput" onkeyup="searchObjects()">
+          </div>
         </div>
       </div>
       <!--Trajectories-->
-      <button type ="button" class="collapsible">Missions</button>
+      <button type="button" id="missions-btn" class="collapsible">Missions 
+      </button>
       <div class="content">
         <div id="missions">
-          <!--Search Bar-->
-          <input type="text" placeholder="Search.." id="myInput2" onkeyup="filterFunction2()">
-          <!--Example Planetary Objects-->
+          <button type="button"  class="collapsible">Pinned Missions</button>
+          <div class="content" id = "pinned_missions">
+          </div>
+
+          <button type="button"  class="collapsible">Missions Library</button>
+          <div class="content" id = "mission_library">
+            <input type="text" placeholder="Search Missons.." id="missionInput" onkeyup="searchMissions()">
+          </div>
           
         </div>
       </div>
+
     </div>
-    
     <!--Sidebar-->
+    <script src="functions.js"></script>
   </body>
 </html>
