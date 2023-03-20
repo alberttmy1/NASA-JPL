@@ -53,6 +53,9 @@ function spice(target_, obs_, utctim_ ){
 }
 window.spice = spice;
 
+
+
+
 //makes an ajax call to ask for planet data
 //includes a promise so that the next function waits for data
 function ajax_call(target){
@@ -85,17 +88,16 @@ function spice_orbit(data){
 }
 window.spice_orbit = spice_orbit;
 
-function spice_form(){
+function spice_form(data){
   console.log("spice orbit function entered")
   var newCoordinates = []; //new coordinates
   var data = $("model_update").serialize()
   console.log(data)
   $.ajax({
-    url:'https://spice-api.herokuapp.com/orbits?planet='+data,
+    url:'https://spice-api.herokuapp.com/form_data?'+data,
     type: 'GET',
     dataType:'JSON',
     crossDomain: true,
-    planet:document.getElementById("Target").value,
     success:function(data){
       alert("FORM FUNCTION: "+document.getElementById("Target").value+" orbit updated: " + data.x +", " + data.y +", "+ data.z);
       newCoordinates[0] = data.x;
