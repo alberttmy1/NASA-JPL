@@ -19,14 +19,23 @@
     <div class="sidenav">
       <button type="button" class = "collapsible" id="spice_form" >Test Spice </button>
       <div class="content">
-        <form id="model_update" class="" action="spice()" method="post">
-          <label for="target">Target:</label><br>
-          <input type="text" id="Target" name="Target">
-          <label for="target">Time:</label><br>
-          <input type="text" id="Time" name="Time">
-          <!-- TODO:https://stackoverflow.com/questions/2019608/pass-entire-form-as-data-in-jquery-ajax-function -->
-          <button type="submit" id ="spice_form_submit" onclick="spice_form()">Send</button>
-        </form> 
+        
+        <form id="spicey"action="">
+          Planet: <input type="text" name="Planet" value="Earth"><br>
+          Time: <input type="text" name="Time" value="2004 jun 11 19:32:00"><br>
+        </form>
+
+        <button id="submit_spice">Serialize form values</button>
+        <script>
+          $(document).ready(function(){
+            $("#submit_spice").click(function(){
+              console.log("serializing")
+              var str = $("#spicey").serialize();
+              console.log(str)
+              spice_form(str)
+            });
+          });
+        </script>
       </div>
 
       <!--Environment-->

@@ -1,16 +1,15 @@
-function spice_form(){
+function spice_form(str){
     console.log("spice orbit function entered")
     var newCoordinates = []; //new coordinates
-    var data = $("model_update").serialize()
-    console.log(data)
+    // var data = $("model_update").serialize()
+    console.log(str)
     $.ajax({
-      url:'https://spice-api.herokuapp.com/orbits?planet='+data,
+      url:'https://spice-api.herokuapp.com/form_data?'+str,
       type: 'GET',
       dataType:'JSON',
       crossDomain: true,
-      planet:document.getElementById("Target").value,
       success:function(data){
-        alert("FORM FUNCTION: "+document.getElementById("Target").value+" orbit updated: " + data.x +", " + data.y +", "+ data.z);
+        alert("FORM FUNCTION: "+" orbit updated: " + data.x +", " + data.y +", "+ data.z);
         newCoordinates[0] = data.x;
         newCoordinates[1] = data.y;
         newCoordinates[2] = data.z;
