@@ -182,7 +182,7 @@ function add_planet(name,time){
 }
 
 //adds planets to solar system
-const date = "2004-06-11sT12:00";
+const date = "2004-06-11T12:00";
 //dynamic date code
 //let date =new Date().toISOString();
 //date = date.slice(0,-14);
