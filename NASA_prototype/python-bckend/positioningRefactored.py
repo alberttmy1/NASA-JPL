@@ -3,6 +3,7 @@ from flask import jsonify
 import spiceypy
 from flask_cors import CORS, cross_origin
 from flask_restful import Resource, Api, reqparse
+import subprocess
 
 
 app = Flask(__name__)
@@ -21,8 +22,11 @@ def after_request(response):
 def return_position():
     METAKR = 'getsa.tm'
     target = request.args.get('planet')
+    utctim = request.args.get('utc')
     obs = 'SUN'
-    utctim = "2004 jun 11 19:32:00"
+    if(utctim == None):
+        utctim = "2004 jun 11 19:32:00"
+    #utctim = "2004 jun 11 19:32:00"
     print(target)
 
     spiceypy.furnsh(METAKR)
@@ -59,36 +63,22 @@ def return_position_form():
 
     return jsonify({"x": return_pos[0], "y": return_pos[1], "z": return_pos[2]}) #RETURN COORDINATES IN JSON.
 
-@app.route('/brief_parse', methods=['GET'])
-def brief_parse():
-    from subprocess import check_output
-    # print out summary of file
-    out = check_output(["brief", "jup068.bsp"])
-
-    # convert to string
-    c = str(out)
-    # add 7 to start the split to s
-    s = c.find("Bodies")
-    e = c.find("Start")
-
-    # slice the string
-    sp = c[s + 8:e]
-
-    # remove the n string
-    rn = sp.replace("n", "")
-
-    # remove the \
-    rs = rn.replace("\ ", "")
-
-    # split the string
-    f = rs.split()
-    # empty array
-    arr = []
-    # remove any barycenters and numbers
-    for x in range(len(f)):
-        if (f[x] != "BARYCENTER" and f[x][0] != "("):
-            arr.append(f[x])
-    print(arr)
+@app.route('/get_body', methods=['GET'])
+def getBody():
+    kernel = request.args.get('kernels')  # planet: self explanatory
+    ids = []
+    idso = []
+    bodylist = []
+    # for x in Kernels:
+    #     ids = spiceypy.spkobj(Kernels, idso)
+    #     for i in range(len(ids)):
+    #         body = spiceypy.bodc2n(ids[i])
+    #         bodylist.append(body)
+    ids = spiceypy.spkobj(kernel, idso)
+    for i in range(len(ids)):
+        body = spiceypy.bodc2n(ids[i])
+        bodylist.append(body)
+    return bodylist
 
 
 @app.route('/')
