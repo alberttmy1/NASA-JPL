@@ -1,0 +1,3 @@
+[submodule "NASA_prototype/NASA_prototype/spice-api"]
+	path = NASA_prototype/NASA_prototype/spice-api
+	url = https://github.com/makwayne117/spice-api.git

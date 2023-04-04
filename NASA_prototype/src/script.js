@@ -15,17 +15,6 @@ function importAll(r) {
   return images;
 }
 
-// $.ajaxSetup({
-//   type: "GET",
-//   data: {},
-//   dataType: 'json',
-//   xhrFields: {
-//      withCredentials: true
-//   },
-//   crossDomain: true,
-//   contentType: 'application/json; charset=utf-8'
-// });
-
 
 function spice(target_, obs_, utctim_ ){
     console.log("spice function entered")
@@ -55,6 +44,9 @@ window.spice = spice;
 
 //makes an ajax call to ask for planet data
 //includes a promise so that the next function waits for data
+
+
+
 function ajax_call(target){
   return new Promise((resolve,reject) => {
     $.ajax({
@@ -64,16 +56,20 @@ function ajax_call(target){
       crossDomain: true,
       planet:target,
       success:function(data){
-        resolve(data)
+        resolve(data);
       },
       error:function(xhr,status,error){
         var errorMessage = xhr.status + ':' + xhr.statusText
-        reject(data)
+        reject(data);
         alert('Error - ' + errorMessage);
       }
     })
   })
 }
+
+
+
+
 //takes data from ajax call and returns the coordinates
 function spice_orbit(data){
     console.log("spice orbit function entered")
@@ -84,8 +80,76 @@ function spice_orbit(data){
 }
 window.spice_orbit = spice_orbit;
 
+function ajax_planets(){
+  var bodlist;
+  return new Promise((resolve,reject) => {
+    $.ajax({
+      url:'https://spice-api.herokuapp.com/get_body?kernels=kernels/981005_PLTEPH-DE405S.bsp',
+      type: 'GET',
+      dataType:'JSON',
+      crossDomain: true,
+      success:function(data){
+        resolve(data);
+      },
+      error:function(xhr,status,error){
+        var errorMessage = xhr.status + ':' + xhr.statusText
+        reject(data);
+        alert('Error - ' + errorMessage);
+      }
+    })
+  })
+}
+
 
 const images = importAll(require.context('./assets', false, /\.(png|jpe?g|svg)$/));
+
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+
+// function to add buttons to collapsible
+function addButtons(objects, id) {
+  var buttonsContainer = document.getElementById(id);
+  objects.forEach(function(objects) {
+    var button = document.createElement("button");
+    button.innerHTML = objects;
+    button.type = "button";
+    button.classList.add("collapsible");
+
+    // create content div
+    var content = document.createElement("div");
+    content.classList.add("content");
+
+    // create pin checkbox
+    var pinCheckbox = document.createElement("input");
+    pinCheckbox.type = "checkbox";
+    pinCheckbox.id = "pin_checkbox";
+    pinCheckbox.checked = false;
+    pinCheckbox.classList.add("pinCheckbox");
+    pinCheckbox.addEventListener("click", function() {
+      var parent = button.parentNode;
+      var parent_content = content.parentNode;
+      if (this.checked) {
+        button.classList.add("pinned");
+      } else {
+        button.classList.remove("pinned");
+      }
+    }); 
+    return newCoordinates;
+  })
+}
+window.spice = spice;
 
 // Debug
 const gui = new dat.GUI()
@@ -179,12 +243,37 @@ function add_planet(name){
       console.log(error)
     })
 }
+(async () => {
+  var objects = [];
+  var temp = await(ajax_planets());
+  console.log(temp);
+  // gets rid of baycenter
+  for(let i = 0; i < temp.length; i++) {
+      if(temp[i].search("BARYCENTER") < 0 && temp[i] != "SUN"){
+          objects.push(temp[i]);
+      }
+    }
+  console.log(objects);
+  //add planets 
+  for(let x = 0; x < objects.length; x++){
+    add_planet(objects[x]);
+  }
+})();
+// var objects = await(ajax_planets());
 
+
+// for(let i = 0; i < objects.length; i++) {
+//   add_planet(objects[i]);
+// }
 //adds planets to solar system
-add_planet("MERCURY");
-add_planet("VENUS");
-add_planet("EARTH");
-add_planet("MARS");
+
+// add_planet("MERCURY");
+// add_planet("VENUS");
+// add_planet("EARTH");
+// add_planet("MARS");
+// add_planet("SATURN");
+
+
 
 //add_planet("JUPITER");
 //shows list of planets
