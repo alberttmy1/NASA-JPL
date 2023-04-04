@@ -6,6 +6,7 @@ import * as dat from 'dat.gui'
 import SceneInit from "./lib/SceneInit";
 import Planet from "./lib/Planet";
 import Rotation from "./lib/Rotation";
+import {addButtons} from "./functions.js";
 
 //imports images
 function importAll(r) {
@@ -161,7 +162,8 @@ const starTexture = new THREE.TextureLoader().load(images['galaxy.jpg'].default)
 test.scene.background = starTexture;
 
 //array of all planet objects
-const planets = [];
+export const planets = [];
+
 //planets
 function add_planet(name){
   //makes ajax call with planet name
@@ -200,16 +202,19 @@ function add_planet(name){
   for(let x = 0; x < objects.length; x++){
     add_planet(objects[x]);
   }
+
+  // call function to add buttons to collapsible
+  addButtons(objects, "object_library", "pinned_objects");
 })();
 // var objects = await(ajax_planets());
 
 //adds planets to solar system
-// add_planet("MERCURY");
+add_planet("MERCURY");
 // add_planet("VENUS");
 // add_planet("EARTH");
 // add_planet("MARS");
 // add_planet("SATURN");
-
 //add_planet("JUPITER");
-//shows list of planets
-console.log(planets);
+
+
+addButtons(missions, "mission_library", "pinned_missions");

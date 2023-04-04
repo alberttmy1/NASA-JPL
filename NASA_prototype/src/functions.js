@@ -1,4 +1,7 @@
-function searchObjects(){
+// planets from scripts.js is the objects 
+// import * as planets from './script';
+
+export function searchObjects(){
     // Get input value
     var input = document.getElementById("objectInput").value.toLowerCase();
     // Get remaining button div
@@ -14,7 +17,7 @@ function searchObjects(){
     }
 }
 
-function searchMissions(){
+export function searchMissions(){
     // Get input value
     var input = document.getElementById("missionInput").value.toLowerCase();
     // Get remaining button div
@@ -47,7 +50,7 @@ for (i = 0; i < coll.length; i++) {
 }
 
 // function to add buttons to collapsible
-function addButtons(objects, id, pinned) {
+export function addButtons(objects, id, pinned) {
   var buttonsContainer = document.getElementById(id);
   objects.forEach(function(objects) {
     var button = document.createElement("button");
@@ -155,11 +158,3 @@ function addButtons(objects, id, pinned) {
     });
   });
 }
-
-// example data for buttons
-var objects = ["Earth", "Mars", "Jupyter", "Saturn", "Venus"];
-var missions = ["Mars Mission", "Apollo I", "Apollo II"];
-
-// call function to add buttons to collapsible
-addButtons(objects, "object_library", "pinned_objects");
-addButtons(missions, "mission_library", "pinned_missions");
