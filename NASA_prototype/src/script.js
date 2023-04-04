@@ -7,15 +7,14 @@ import SceneInit from "./lib/SceneInit";
 import Planet from "./lib/Planet";
 import Rotation from "./lib/Rotation";
 
-
-
+//imports images
 function importAll(r) {
   let images = {};
   r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
   return images;
 }
 
-
+//test spice function
 function spice(target_, obs_, utctim_ ){
     console.log("spice function entered")
     var newCoordinates = []; //new coordinates
@@ -44,9 +43,6 @@ window.spice = spice;
 
 //makes an ajax call to ask for planet data
 //includes a promise so that the next function waits for data
-
-
-
 function ajax_call(target){
   return new Promise((resolve,reject) => {
     $.ajax({
@@ -67,9 +63,6 @@ function ajax_call(target){
   })
 }
 
-
-
-
 //takes data from ajax call and returns the coordinates
 function spice_orbit(data){
     console.log("spice orbit function entered")
@@ -80,6 +73,7 @@ function spice_orbit(data){
 }
 window.spice_orbit = spice_orbit;
 
+//ajax call for all planet data
 function ajax_planets(){
   var bodlist;
   return new Promise((resolve,reject) => {
@@ -100,56 +94,8 @@ function ajax_planets(){
   })
 }
 
-
+//loads images
 const images = importAll(require.context('./assets', false, /\.(png|jpe?g|svg)$/));
-
-var coll = document.getElementsByClassName("collapsible");
-var i;
-
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var content = this.nextElementSibling;
-    if (content.style.display === "block") {
-      content.style.display = "none";
-    } else {
-      content.style.display = "block";
-    }
-  });
-}
-
-// function to add buttons to collapsible
-function addButtons(objects, id) {
-  var buttonsContainer = document.getElementById(id);
-  objects.forEach(function(objects) {
-    var button = document.createElement("button");
-    button.innerHTML = objects;
-    button.type = "button";
-    button.classList.add("collapsible");
-
-    // create content div
-    var content = document.createElement("div");
-    content.classList.add("content");
-
-    // create pin checkbox
-    var pinCheckbox = document.createElement("input");
-    pinCheckbox.type = "checkbox";
-    pinCheckbox.id = "pin_checkbox";
-    pinCheckbox.checked = false;
-    pinCheckbox.classList.add("pinCheckbox");
-    pinCheckbox.addEventListener("click", function() {
-      var parent = button.parentNode;
-      var parent_content = content.parentNode;
-      if (this.checked) {
-        button.classList.add("pinned");
-      } else {
-        button.classList.remove("pinned");
-      }
-    }); 
-    return newCoordinates;
-  })
-}
-window.spice = spice;
 
 // Debug
 const gui = new dat.GUI()
@@ -158,21 +104,18 @@ const gui = new dat.GUI()
 const canvas = document.querySelector('canvas.webgl')
 
 // Scene
-//const scene = new THREE.Scene()
 let test = new SceneInit();
 test.initScene();
 test.animate();
 
 // Objects
 
-// Radius,Hight, width
+//SUN
 const sunGeometry = new THREE.SphereGeometry(0.00465047);
 //scaled up sun for visiblity
 //const sunGeometry = new THREE.SphereGeometry(0.265047);
 const sunTexture = new THREE.TextureLoader().load(images['sun.jpg'].default);
-// Materials
 const sunMaterial = new THREE.MeshBasicMaterial({map: sunTexture});
-
 //sun halo, uses code from planet class, can be cleaned up later
 var resolution = 15 * 50; // segments in the line
 var length = 360 / resolution;
@@ -208,7 +151,6 @@ var sunHalo = new THREE.Line(orbitLine, material);
 sunHalo.position.set(0, 0, 0);
 
 // Mesh
-
 const sunMesh = new THREE.Mesh(sunGeometry,sunMaterial);
 const solarSystem = new THREE.Group();
 solarSystem.add(sunMesh);
@@ -261,162 +203,13 @@ function add_planet(name){
 })();
 // var objects = await(ajax_planets());
 
-
-// for(let i = 0; i < objects.length; i++) {
-//   add_planet(objects[i]);
-// }
 //adds planets to solar system
-
 // add_planet("MERCURY");
 // add_planet("VENUS");
 // add_planet("EARTH");
 // add_planet("MARS");
 // add_planet("SATURN");
 
-
-
 //add_planet("JUPITER");
 //shows list of planets
 console.log(planets);
-
-//old shit, doesnt work
-/*var newCoordinates = spice_orbit("MERCURY");
-const mercury = new Planet(1516, newCoordinates[0], newCoordinates[1], newCoordinates[2], images['mercury.png'].default);
-const mercuryMesh = mercury.getMesh();
-let mercurySystem = new THREE.Group();
-mercurySystem.add(mercuryMesh);
-mercurySystem.add(mercury.orbit);
-mercurySystem.add(mercury.halo);*/
-
-//var newCoordinates = spice_orbit("VENUS");
-/*const venus = new Planet(3760.4, newCoordinates[0], newCoordinates[1], newCoordinates[2], images['venus.jpg'].default);
-const venusMesh = venus.getMesh();
-let venusSystem = new THREE.Group();
-venusSystem.add(venusMesh);
-venusSystem.add(venus.orbit);
-venusSystem.add(venus.halo);
-
-//var newCoordinates = spice_orbit("EARTH");
-const earth = new Planet(3958.8, newCoordinates[0],newCoordinates[1], newCoordinates[2], images['earth.jpg'].default);
-console.log(newCoordinates);
-const earthMesh = earth.getMesh();
-let earthSystem = new THREE.Group();
-earthSystem.add(earthMesh);
-earthSystem.add(earth.orbit);
-earthSystem.add(earth.halo);
-
-//var newCoordinates = spice_orbit("MARS");
-const mars = new Planet(2106.1, newCoordinates[0], newCoordinates[1], newCoordinates[2], images['mars.jpg'].default);
-const marsMesh = mars.getMesh();
-let marsSystem = new THREE.Group();
-marsSystem.add(marsMesh);
-marsSystem.add(mars.orbit);
-marsSystem.add(mars.halo);
-
-//var newCoordinates = spice_orbit("JUPITER");
-const jupiter = new Planet(43441, newCoordinates[0], newCoordinates[1], newCoordinates[2], images['jupiter.jpg'].default);
-const jupiterMesh = jupiter.getMesh();
-let jupiterSystem = new THREE.Group();
-jupiterSystem.add(jupiterMesh);
-jupiterSystem.add(jupiter.orbit);
-jupiterSystem.add(jupiter.halo);
-
-//var newCoordinates = spice_orbit("SATURN");
-const saturn = new Planet(36184, newCoordinates[0], newCoordinates[1], newCoordinates[2], images['saturn.jpg'].default);
-const saturnMesh = saturn.getMesh();
-let saturnSystem = new THREE.Group();
-saturnSystem.add(saturnMesh);
-saturnSystem.add(saturn.orbit);
-saturnSystem.add(saturn.halo);
-
-//var newCoordinates = spice_orbit("URANUS");
-const uranus = new Planet(15759, newCoordinates[0], newCoordinates[1], newCoordinates[2], images['uranus.jpg'].default);
-const uranusMesh = uranus.getMesh();
-let uranusSystem = new THREE.Group();
-uranusSystem.add(uranusMesh);
-uranusSystem.add(uranus.orbit);
-uranusSystem.add(uranus.halo);
-
-//var newCoordinates = spice_orbit("NEPTUNE");
-const neptune = new Planet(15299, newCoordinates[0], newCoordinates[1], newCoordinates[2], images['neptune.jpg'].default);
-const neptuneMesh = neptune.getMesh();
-let neptuneSystem = new THREE.Group();
-neptuneSystem.add(neptuneMesh);
-neptuneSystem.add(neptune.orbit);
-neptuneSystem.add(neptune.halo);
-
-//var newCoordinates = spice_orbit("PLUTO");
-const pluto = new Planet(738.38, newCoordinates[0], newCoordinates[1], newCoordinates[2], images['pluto.jpg'].default);
-const plutoMesh = pluto.getMesh();
-let plutoSystem = new THREE.Group();
-plutoSystem.add(plutoMesh);
-plutoSystem.add(pluto.orbit);
-plutoSystem.add(pluto.halo);
-
-//add all planaets to solarsystem
-solarSystem.add(mercurySystem,venusSystem, earthSystem, marsSystem, jupiterSystem, saturnSystem, uranusSystem, neptuneSystem, plutoSystem);
-*/
-//add all planaets to solarsystem
-//solarSystem.add(mercurySystem);
-
-
-/*const mercuryRotation = new Rotation(mercuryMesh);
-const mercuryRotationMesh = mercuryRotation.getMesh();
-mercurySystem.add(mercuryRotationMesh);
-const venusRotation = new Rotation(venusMesh);
-const venusRotationMesh = venusRotation.getMesh();
-venusSystem.add(venusRotationMesh);
-const earthRotation = new Rotation(earthMesh);
-const earthRotationMesh = earthRotation.getMesh();
-earthSystem.add(earthRotationMesh);
-const marsRotation = new Rotation(marsMesh);
-const marsRotationMesh = marsRotation.getMesh();
-marsSystem.add(marsRotationMesh);
-const jupiterRotation = new Rotation(jupiterMesh);
-const jupiterRotationMesh = jupiterRotation.getMesh();
-jupiterSystem.add(jupiterRotationMesh);
-
-const saturnRotation = new Rotation(saturnMesh);
-const saturnRotationMesh = saturnRotation.getMesh();
-saturnSystem.add(saturnRotationMesh);
-
-const uranusRotation = new Rotation(uranusMesh);
-const uranusRotationMesh = uranusRotation.getMesh();
-uranusSystem.add(uranusRotationMesh);
-
-const neptuneRotation = new Rotation(neptuneMesh);
-const neptuneRotationMesh = neptuneRotation.getMesh();
-neptuneSystem.add(neptuneRotationMesh);
-
-const plutoRotation = new Rotation(plutoMesh);
-const plutoRotationMesh = plutoRotation.getMesh();
-plutoSystem.add(plutoRotationMesh);*/
-
-// NOTE: Add solar system mesh GUI.
-//await initGui();
-/*const solarSystemGui = gui.addFolder("solar system");
-solarSystemGui.add(mercuryRotationMesh, "visible").name("mercury").listen();
-solarSystemGui.add(venusRotationMesh, "visible").name("venus").listen();
-solarSystemGui.add(earthRotationMesh, "visible").name("earth").listen();
-solarSystemGui.add(marsRotationMesh, "visible").name("mars").listen();
-solarSystemGui.add(jupiterRotationMesh, "visible").name("jupiter").listen();
-solarSystemGui.add(saturnRotationMesh, "visible").name("saturn").listen();
-solarSystemGui.add(uranusRotationMesh, "visible").name("uranus").listen();
-solarSystemGui.add(neptuneRotationMesh, "visible").name("neptune").listen();
-solarSystemGui.add(plutoRotationMesh, "visible").name("pluto").listen();
-// NOTE: Animate solar system at 60fps.
-const EARTH_YEAR = 2 * Math.PI * (1 / 60) * (1 / 60);
-const animate = () => {
-  sunMesh.rotation.y += 0.001;
-  mercurySystem.rotation.y += EARTH_YEAR * 4;
-  venusSystem.rotation.y += EARTH_YEAR * 2;
-  earthSystem.rotation.y += EARTH_YEAR;
-  marsSystem.rotation.y += EARTH_YEAR * 0.5;
-  jupiterSystem.rotation.y += EARTH_YEAR * .2;
-  saturnSystem.rotation.y += EARTH_YEAR * .1;
-  uranusSystem.rotation.y += EARTH_YEAR * .05;
-  neptuneSystem.rotation.y += EARTH_YEAR * .025;
-  plutoSystem.rotation.y += EARTH_YEAR * .025;
-  requestAnimationFrame(animate);
-};
-animate();*/
