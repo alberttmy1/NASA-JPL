@@ -42,9 +42,13 @@ function spice(target_, obs_, utctim_ ){
 }
 window.spice = spice;
 
+
+
+
 //makes an ajax call to ask for planet data
 //includes a promise so that the next function waits for data
 function ajax_call(target,time){
+  // var data;
   return new Promise((resolve,reject) => {
     $.ajax({
       url:'https://spice-api.herokuapp.com/orbits?planet='+target+'&utc='+time,
@@ -78,6 +82,7 @@ window.spice_orbit = spice_orbit;
 //ajax call for all planet data
 function ajax_planets(){
   var bodlist;
+  
   return new Promise((resolve,reject) => {
     $.ajax({
       url:'https://spice-api.herokuapp.com/get_body?kernels=kernels/981005_PLTEPH-DE405S.bsp',

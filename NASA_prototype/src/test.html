@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="test.js"></script>
+<script>
+$(document).ready(function(){
+  $("button").click(function(){
+    var str = $("#help").serialize();
+    console.log(str)
+    spice_form(str)
+  });
+});
+</script>
+</head>
+<body>
+
+<form id="help"action="">
+  Planet: <input type="text" name="Planet" value="Earth"><br>
+  Time: <input type="text" name="Time" value="2004 jun 11 19:32:00"><br>
+</form>
+
+<button>Serialize form values</button>
+
+<div></div>
+
+</body>
+</html>
