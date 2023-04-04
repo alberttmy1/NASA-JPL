@@ -175,7 +175,7 @@ function add_planet(name,time){
       var newCoordinates = spice_orbit(data)
       //used default radius need to add dynamically
       //creates new planet object
-      var planet = new Planet(7000, newCoordinates[0], newCoordinates[1], newCoordinates[2],name);
+      var planet = new Planet(70000, newCoordinates[0], newCoordinates[1], newCoordinates[2],name);
       planets.push(planet);
       var planetMesh = planet.getMesh();
       var system = new THREE.Group();
