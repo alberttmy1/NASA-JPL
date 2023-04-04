@@ -44,14 +44,15 @@ window.spice = spice;
 
 //makes an ajax call to ask for planet data
 //includes a promise so that the next function waits for data
-function ajax_call(target){
+function ajax_call(target,time){
   return new Promise((resolve,reject) => {
     $.ajax({
-      url:'https://spice-api.herokuapp.com/orbits?planet='+target,
+      url:'https://spice-api.herokuapp.com/orbits?planet='+target+'&utc='+time,
       type: 'GET',
       dataType:'JSON',
       crossDomain: true,
       planet:target,
+      utc:time,
       success:function(data){
         resolve(data);
       },
@@ -162,12 +163,12 @@ const starTexture = new THREE.TextureLoader().load(images['galaxy.jpg'].default)
 test.scene.background = starTexture;
 
 //array of all planet objects
-export const planets = [];
-
+const planets = [];
+const date = "2004-06-11T12:00";
 //planets
-function add_planet(name){
+function add_planet(name,time){
   //makes ajax call with planet name
-  ajax_call(name)
+  ajax_call(name,time)
   //if data received then adds planet
     .then((data) => {
       console.log(name);
@@ -200,7 +201,7 @@ function add_planet(name){
   console.log(objects);
   //add planets 
   for(let x = 0; x < objects.length; x++){
-    add_planet(objects[x]);
+    add_planet(objects[x],date);
   }
 
   // call function to add buttons to collapsible
@@ -209,12 +210,16 @@ function add_planet(name){
 // var objects = await(ajax_planets());
 
 //adds planets to solar system
-add_planet("MERCURY");
-// add_planet("VENUS");
-// add_planet("EARTH");
-// add_planet("MARS");
-// add_planet("SATURN");
-//add_planet("JUPITER");
+//dynamic date code
+//let date =new Date().toISOString();
+//date = date.slice(0,-14);
+//date = (date+"T12:00");
+//console.log("hello hi", date);
 
+//add_planet("MERCURY",date);
+//add_planet("VENUS",date);
+//add_planet("EARTH",date);
+//add_planet("MARS",date);
 
-addButtons(missions, "mission_library", "pinned_missions");
+//shows list of planets
+console.log(planets);
