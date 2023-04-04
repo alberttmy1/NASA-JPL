@@ -2,6 +2,11 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
 
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass';
+
 export default class SceneInit {
   constructor(fov = 36, camera, scene, stats, controls, renderer) {
     this.fov = fov;
@@ -40,6 +45,19 @@ export default class SceneInit {
     this.stats = Stats();
     document.body.appendChild(this.stats.dom);
 
+    // effects
+    /*
+    const renderScene = new RenderPass(scene, camera);
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(w, h), 3.0, 0, 0);
+
+    const afterImagePass = new AfterimagePass();
+    afterImagePass.uniforms["damp"].value = 0.975;
+
+    const composer = new EffectComposer(renderer);
+    composer.addPass(renderScene);
+    composer.addPass(bloomPass);
+    composer.addPass(afterImagePass);
+    */
     // ambient light which is for the whole scene
     // let ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
     // ambientLight.castShadow = false;
@@ -64,6 +82,7 @@ export default class SceneInit {
   }
 
   render() {
+    //composer.render(this.scene, this.camera);
     this.renderer.render(this.scene, this.camera);
   }
 
