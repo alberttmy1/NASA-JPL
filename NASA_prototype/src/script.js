@@ -6,6 +6,7 @@ import * as dat from 'dat.gui'
 import SceneInit from "./lib/SceneInit";
 import Planet from "./lib/Planet";
 import Rotation from "./lib/Rotation";
+import {addButtons} from "./functions.js";
 
 //imports images
 function importAll(r) {
@@ -203,6 +204,9 @@ function add_planet(name,time){
   for(let x = 0; x < objects.length; x++){
     add_planet(objects[x],date);
   }
+
+  // call function to add buttons to collapsible
+  addButtons(objects, "object_library", "pinned_objects");
 })();
 // var objects = await(ajax_planets());
 //const date = "2023-04-04T12:00";
