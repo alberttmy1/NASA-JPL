@@ -163,7 +163,8 @@ test.scene.background = starTexture;
 
 //array of all planet objects
 const planets = [];
-const date = "2004-06-11T12:00";
+//const date = "2004-06-11T12:00";
+let date =new Date().toISOString();
 //planets
 function add_planet(name,time){
   //makes ajax call with planet name
@@ -193,7 +194,7 @@ function add_planet(name,time){
   console.log(temp);
   // gets rid of baycenter
   for(let i = 0; i < temp.length; i++) {
-      if(temp[i].search("BARYCENTER") < 0 && temp[i] != "SUN"){
+      if(temp[i].search("BARYCENTER") >= 0 && temp[i] != "SUN"){
           objects.push(temp[i]);
       }
     }
@@ -204,14 +205,17 @@ function add_planet(name,time){
   }
 })();
 // var objects = await(ajax_planets());
+//const date = "2023-04-04T12:00";
 
-//adds planets to solar system
-//dynamic date code
-//let date =new Date().toISOString();
+/*let today = new Date().toISOString();
+const date = new Date();
+const dates = [today];
+for(let i = 0; i<9; i++){
+  let temp = new Date(date.setDate(date.getDate() - 1)).toISOString();
+  dates.push(temp);
+}*/
 //date = date.slice(0,-14);
 //date = (date+"T12:00");
-//console.log("hello hi", date);
-
 //add_planet("MERCURY",date);
 //add_planet("VENUS",date);
 //add_planet("EARTH",date);
