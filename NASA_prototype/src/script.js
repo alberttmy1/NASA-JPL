@@ -185,6 +185,19 @@ test.scene.add(solarSystem);
 const starTexture = new THREE.TextureLoader().load(images['galaxy.jpg'].default);
 test.scene.background = starTexture;
 
+// Listen for changes to the checkbox
+var envBodyCheckbox = document.getElementById('env_body');
+envBodyCheckbox.addEventListener('change', function() {
+  if (this.checked) {
+    // Set the background to an image if the checkbox is checked
+    test.scene.background = starTexture;
+  } else {
+    // Set the background color to black if the checkbox is unchecked
+    test.scene.clearColor = new THREE.Color(0x000000);
+    test.scene.background = null;
+  }
+});
+
 //array of all planet objects
 const planets = [];
 const date = "2004-06-11T12:00";
