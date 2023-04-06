@@ -51,7 +51,7 @@ function ajax_call(target,time){
   // var data;
   return new Promise((resolve,reject) => {
     $.ajax({
-      url:'https://spice-api.herokuapp.com/orbits?planet='+target+'&utc='+time,
+      url:'https://spice-api.herokuapp.com/pos?planet='+target+'&utc='+time,
       type: 'GET',
       dataType:'JSON',
       crossDomain: true,
