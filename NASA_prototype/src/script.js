@@ -43,15 +43,13 @@ function spice(target_, obs_, utctim_ ){
 window.spice = spice;
 
 
-
-
 //makes an ajax call to ask for planet data
 //includes a promise so that the next function waits for data
 function ajax_call(target,time){
   // var data;
   return new Promise((resolve,reject) => {
     $.ajax({
-      url:'https://spice-api.herokuapp.com/orbits?planet='+target+'&utc='+time,
+      url:'https://spice-api.herokuapp.com/pos?planet='+target+'&utc='+time,
       type: 'GET',
       dataType:'JSON',
       crossDomain: true,
@@ -98,6 +96,26 @@ function ajax_planets(){
         alert('Error - ' + errorMessage);
       }
     })
+  })
+}
+
+//ajax call for all mission data
+function ajax_missions(){
+
+  return new Promise((resolve,reject) => {
+    $.ajax({
+      url: `https://spice-api.herokuapp.com/missions`,
+      type: "GET",
+      dataType: "json",
+      crossDomain: true,
+      success: function(missions) {
+        resolve(missions)
+      },
+      error: function(xhr, textStatus, errorThrown) {
+        console.log(`Error: ${errorThrown}`);
+        reject(missions);
+      }
+    });
   })
 }
 
@@ -212,6 +230,15 @@ function add_planet(name,time){
   // call function to add buttons to collapsible
   addButtons(objects, "object_library", "pinned_objects");
 })();
+
+(async () => {
+  var missions = await(ajax_missions());
+  console.log(missions);
+
+  // call function to add buttons to collapsible
+  addButtons(missions, "mission_library", "pinned_missions");
+})();
+
 // var objects = await(ajax_planets());
 
 //adds planets to solar system

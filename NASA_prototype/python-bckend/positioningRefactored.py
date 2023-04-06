@@ -4,11 +4,25 @@ import spiceypy
 from flask_cors import CORS, cross_origin
 from flask_restful import Resource, Api, reqparse
 import subprocess
+import requests
+import re
 
 
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
+
+# Flask route endpoint for missions 
+@app.route('/missions', methods=['GET'])
+def missions():
+    url = 'https://naif.jpl.nasa.gov/pub/naif/'
+    response = requests.get(url)
+    response.raise_for_status()
+    # regex to match with all directories and no urls on the webpage 
+    mission_regex = re.compile(r'href="(.*?)/"')
+    missions = mission_regex.findall(response.text)
+    print(missions)
+    return jsonify(missions)
 
 @app.after_request
 def after_request(response):
