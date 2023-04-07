@@ -12,17 +12,7 @@ app = Flask(__name__)
 api = Api(app)
 CORS(app)
 
-# Flask route endpoint for missions 
-@app.route('/missions', methods=['GET'])
-def missions():
-    url = 'https://naif.jpl.nasa.gov/pub/naif/'
-    response = requests.get(url)
-    response.raise_for_status()
-    # regex to match with all directories and no urls on the webpage 
-    mission_regex = re.compile(r'href="(.*?)/"')
-    missions = mission_regex.findall(response.text)
-    print(missions)
-    return jsonify(missions)
+# TODO: load all mission and their kernels into ./backend.   
 
 @app.after_request
 def after_request(response):

@@ -99,26 +99,6 @@ function ajax_planets(){
   })
 }
 
-//ajax call for all mission data
-function ajax_missions(){
-
-  return new Promise((resolve,reject) => {
-    $.ajax({
-      url: `https://spice-api.herokuapp.com/missions`,
-      type: "GET",
-      dataType: "json",
-      crossDomain: true,
-      success: function(missions) {
-        resolve(missions)
-      },
-      error: function(xhr, textStatus, errorThrown) {
-        console.log(`Error: ${errorThrown}`);
-        reject(missions);
-      }
-    });
-  })
-}
-
 //loads images
 const images = importAll(require.context('./assets', false, /\.(png|jpe?g|svg)$/));
 
@@ -244,27 +224,12 @@ function add_planet(name,time){
   addButtons(objects, "object_library", "pinned_objects");
 })();
 
-(async () => {
-  var missions = await(ajax_missions());
-  console.log(missions);
+var missions = ["APOLLO", "BEPICOLOMBO", "CASSINI","CHANDRA", 
+"CLEMENTINE","CONTOUR","DART","DAWN","DEEPIMPACT","DS1","EUROPACLIPPER","EXOMARS2016","FIDO","GIOTTO","GLL","GNS","GRAIL",
+"HAYABUSA", "HELIOS", "HST","INSIGHT","IUE","JUNO","JWST","LADEE","LPM","LRO","LUCY","LUNARORBITER",
+"M01", "M10",  "M2", "M9", "MARS2020", "MAVEN", "MCO", "MER", "MESSENGER", "MEX", "MGN", "MGS", "MPF", "MPL", "MRO", 
+"MSL", "MSR", "NEAR", "NEWHORIZONS", "NOZOMI", "ORX", "PHOBOS88", "PHOENIX", "PHSRM", "PIONEER10", "PIONEER11", "PIONEER12", 
+"PIONEER6", "PIONEER8", "PSYCHE", "ROCKY7", "ROSETTA", "SDU", "SELENE", "SIRTF", "SMAP", "SMART1", "SPP", "STEREO", "TDRSS", 
+"THEMIS", "ULYSSES", "VEGA", "VEX", "VIKING", "VOYAGER"]; 
 
-  // call function to add buttons to collapsible
-  addButtons(missions, "mission_library", "pinned_missions");
-})();
-
-// var objects = await(ajax_planets());
-
-//adds planets to solar system
-//dynamic date code
-//let date =new Date().toISOString();
-//date = date.slice(0,-14);
-//date = (date+"T12:00");
-//console.log("hello hi", date);
-
-//add_planet("MERCURY",date);
-//add_planet("VENUS",date);
-//add_planet("EARTH",date);
-//add_planet("MARS",date);
-
-//shows list of planets
-console.log(planets);
+addButtons(missions, "mission_library", "pinned_missions");
