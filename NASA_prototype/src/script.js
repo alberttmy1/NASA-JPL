@@ -164,7 +164,6 @@ const starTexture = new THREE.TextureLoader().load(images['galaxy.jpg'].default)
 
 //array of all planet objects
 const planets = [];
-//const date = "2004-06-11T12:00";
 let date =new Date().toISOString();
 //planets
 function add_planet(name,time){
@@ -178,13 +177,6 @@ function add_planet(name,time){
       //creates new planet object
       var planet = new Planet(7000, newCoordinates[0], newCoordinates[1], newCoordinates[2],name,test);
       planets.push(planet);
-      //old system add
-      /*var planetMesh = planet.getMesh();
-      var system = new THREE.Group();
-      system.add(planetMesh);
-      //system.add(planet.orbit);
-      system.add(planet.halo);
-      test.scene.add(system);*/
     })
     .catch((error) => {
       console.log(error)
