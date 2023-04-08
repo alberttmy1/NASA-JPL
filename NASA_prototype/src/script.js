@@ -42,9 +42,11 @@ function spice(target_, obs_, utctim_ ){
 }
 window.spice = spice;
 
+
 //makes an ajax call to ask for planet data
 //includes a promise so that the next function waits for data
 function ajax_call(target,time){
+  // var data;
   return new Promise((resolve,reject) => {
     $.ajax({
       url:'https://spice-api.herokuapp.com/pos?planet='+target+'&utc='+time,
@@ -78,6 +80,7 @@ window.spice_orbit = spice_orbit;
 //ajax call for all planet data
 function ajax_planets(){
   var bodlist;
+  
   return new Promise((resolve,reject) => {
     $.ajax({
       url:'https://spice-api.herokuapp.com/get_body?kernels=kernels/981005_PLTEPH-DE405S.bsp',
@@ -162,6 +165,19 @@ test.scene.add(solarSystem);
 const starTexture = new THREE.TextureLoader().load(images['galaxy.jpg'].default);
 //test.scene.background = starTexture;
 
+// Listen for changes to the checkbox
+var envBodyCheckbox = document.getElementById('env_body');
+envBodyCheckbox.addEventListener('change', function() {
+  if (this.checked) {
+    // Set the background to an image if the checkbox is checked
+    test.scene.background = starTexture;
+  } else {
+    // Set the background color to black if the checkbox is unchecked
+    test.scene.clearColor = new THREE.Color(0x000000);
+    test.scene.background = null;
+  }
+});
+
 //array of all planet objects
 const planets = [];
 let date =new Date().toISOString();
@@ -202,5 +218,12 @@ function add_planet(name,time){
   addButtons(objects, "object_library", "pinned_objects");
 })();
 
-//shows list of planets
-console.log(planets);
+var missions = ["APOLLO", "BEPICOLOMBO", "CASSINI","CHANDRA", 
+"CLEMENTINE","CONTOUR","DART","DAWN","DEEPIMPACT","DS1","EUROPACLIPPER","EXOMARS2016","FIDO","GIOTTO","GLL","GNS","GRAIL",
+"HAYABUSA", "HELIOS", "HST","INSIGHT","IUE","JUNO","JWST","LADEE","LPM","LRO","LUCY","LUNARORBITER",
+"M01", "M10",  "M2", "M9", "MARS2020", "MAVEN", "MCO", "MER", "MESSENGER", "MEX", "MGN", "MGS", "MPF", "MPL", "MRO", 
+"MSL", "MSR", "NEAR", "NEWHORIZONS", "NOZOMI", "ORX", "PHOBOS88", "PHOENIX", "PHSRM", "PIONEER10", "PIONEER11", "PIONEER12", 
+"PIONEER6", "PIONEER8", "PSYCHE", "ROCKY7", "ROSETTA", "SDU", "SELENE", "SIRTF", "SMAP", "SMART1", "SPP", "STEREO", "TDRSS", 
+"THEMIS", "ULYSSES", "VEGA", "VEX", "VIKING", "VOYAGER"]; 
+
+addButtons(missions, "mission_library", "pinned_missions");
