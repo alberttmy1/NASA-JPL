@@ -160,11 +160,10 @@ solarSystem.add(sunHalo);
 test.scene.add(solarSystem);
 
 const starTexture = new THREE.TextureLoader().load(images['galaxy.jpg'].default);
-test.scene.background = starTexture;
+//test.scene.background = starTexture;
 
 //array of all planet objects
 const planets = [];
-//const date = "2004-06-11T12:00";
 let date =new Date().toISOString();
 //planets
 function add_planet(name,time){
@@ -176,14 +175,8 @@ function add_planet(name,time){
       var newCoordinates = spice_orbit(data)
       //used default radius need to add dynamically
       //creates new planet object
-      var planet = new Planet(70000, newCoordinates[0], newCoordinates[1], newCoordinates[2],name);
+      var planet = new Planet(7000, newCoordinates[0], newCoordinates[1], newCoordinates[2],name,test);
       planets.push(planet);
-      var planetMesh = planet.getMesh();
-      var system = new THREE.Group();
-      system.add(planetMesh);
-      //system.add(planet.orbit);
-      system.add(planet.halo);
-      test.scene.add(system);
     })
     .catch((error) => {
       console.log(error)
@@ -208,22 +201,6 @@ function add_planet(name,time){
   // call function to add buttons to collapsible
   addButtons(objects, "object_library", "pinned_objects");
 })();
-// var objects = await(ajax_planets());
-//const date = "2023-04-04T12:00";
-
-/*let today = new Date().toISOString();
-const date = new Date();
-const dates = [today];
-for(let i = 0; i<9; i++){
-  let temp = new Date(date.setDate(date.getDate() - 1)).toISOString();
-  dates.push(temp);
-}*/
-//date = date.slice(0,-14);
-//date = (date+"T12:00");
-//add_planet("MERCURY",date);
-//add_planet("VENUS",date);
-//add_planet("EARTH",date);
-//add_planet("MARS",date);
 
 //shows list of planets
 console.log(planets);

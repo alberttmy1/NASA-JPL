@@ -7,17 +7,17 @@ import * as THREE from "three";
 //pos.unshift([x,y,z]) adds new planet position to front
 
 export default class Planet {
-  constructor(radius, positionX, positionY, positionZ, name/*, textureFile*/) {
+  constructor(radius, positionX, positionY, positionZ, name, screen/*, textureFile*/) {
+    this.screen = screen;
     this.radius = this.toAU(radius);
     this.pos = [[this.toAU(positionX),this.toAU(positionY),this.toAU(positionZ)]];
     //not using textures currently
     //this.textureFile = textureFile;
-    //orbit shit
-    this.orbit = this.createOrbit();
-    //halo
-    this.halo = this.createHalo();
-    //name for display
     this.name = name;
+    //orbit shit
+    this.orbit = undefined;
+    this.halo = this.createHalo();
+    this.createOrbit()
   }
 
   toAU(km){
@@ -41,40 +41,58 @@ export default class Planet {
     }
     return this.mesh;
   }
+  //ajax call
+  ajax_call(target,time,len){
+    return new Promise((resolve) => {
+        $.ajax({
+          url:'https://spice-api.herokuapp.com/orbits?planet='+target+'&utc='+time+'&length='+len,
+          type: 'GET',
+          dataType:'JSON',
+          crossDomain: true,
+          planet:target,
+          utc:time,
+          length:len
+        })
+          .then((data) => {
+            resolve(data);
+          });
+    })
+  };
+
   //not using orbits currently
   createOrbit() {
-    var orbitLine = new THREE.BufferGeometry();
-    var material = new THREE.LineBasicMaterial({
-      color: this._color,
-      linewidth: 1,
-      fog: true
-    });
+    //date not currently used
+    const date = new Date();
+    //ajax call for orbit info
+    this.ajax_call(this.name,date,10000)
+      .then((data) => {
+        //creates line basics
+        var orbitLine = new THREE.BufferGeometry();
+        var material = new THREE.LineBasicMaterial({
+          color: 'darkred',
+          linewidth: 5,
+          fog: true
+        });
+        for(let i=0; i<data.length; i++){
+          this.pos.push([this.toAU(data[i][0]),this.toAU(data[i][1]),this.toAU(data[i][2])]);
+        }
 
-    //start of temp orbit code
-    // Build the orbit line
-    var resolution = 60; // segments in the line
-    var length = 360 / resolution;
-    const positions = [];
-    for (var i = 0; i <= resolution; i++) {
-      var segment = (i * length) * Math.PI / 180;
-      var orbitAmplitude = this.pos[0][0];
+        orbitLine.setAttribute( 'position', new THREE.Float32BufferAttribute( this.pos.flat(), 3 ) );
+        orbitLine.computeBoundingSphere();
+        var line = new THREE.Line(orbitLine, material);
 
-      positions.push(
-          Math.cos(segment) * orbitAmplitude,
-          0 + this.pos[0][1],
-          Math.sin(segment) * orbitAmplitude + this.pos[0][2]
-      );
-    }
-    orbitLine.setAttribute( 'position', new THREE.Float32BufferAttribute( positions.flat(), 3 ) );
-    //end of temp orbit code
-    //orbitLine.setAttribute( 'position', new THREE.Float32BufferAttribute( this.pos.flat(), 3 ) );
-    //generateMorphTargets( orbitLine );
-		orbitLine.computeBoundingSphere();
-    var line = new THREE.Line(orbitLine, material);
-    line.position.set(0, 0, 0);
-
-    return line;
+        line.position.set(0,0,0);
+        this.orbit = line;
+        //creates planet mesh, adds to solarsystem
+        var planetMesh = this.getMesh();
+        var system = new THREE.Group();
+        system.add(planetMesh);
+        system.add(this.orbit);
+        system.add(this.halo);
+        this.screen.scene.add(system);
+      });
   };
+
   //creates halo for planet visibility, uses orbit code
   createHalo(){
 
@@ -111,7 +129,6 @@ export default class Planet {
     var line = new THREE.Line(orbitLine, material);
 
     line.position.set(this.pos[0][0], this.pos[0][1], this.pos[0][2]);
-
     return line;
   }
   //will be used to display planet name near planet
