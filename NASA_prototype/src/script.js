@@ -163,7 +163,7 @@ solarSystem.add(sunHalo);
 test.scene.add(solarSystem);
 
 const starTexture = new THREE.TextureLoader().load(images['galaxy.jpg'].default);
-//test.scene.background = starTexture;
+test.scene.background = starTexture;
 
 // Listen for changes to the checkbox
 var envBodyCheckbox = document.getElementById('env_body');
