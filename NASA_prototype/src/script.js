@@ -180,7 +180,7 @@ envBodyCheckbox.addEventListener('change', function() {
 
 //array of all planet objects
 const planets = [];
-const date = "2004-06-11T12:00";
+let date =new Date().toISOString();
 //planets
 function add_planet(name,time){
   //makes ajax call with planet name
@@ -191,14 +191,8 @@ function add_planet(name,time){
       var newCoordinates = spice_orbit(data)
       //used default radius need to add dynamically
       //creates new planet object
-      var planet = new Planet(7000, newCoordinates[0], newCoordinates[1], newCoordinates[2],name);
+      var planet = new Planet(7000, newCoordinates[0], newCoordinates[1], newCoordinates[2],name,test);
       planets.push(planet);
-      var planetMesh = planet.getMesh();
-      var system = new THREE.Group();
-      system.add(planetMesh);
-      //system.add(planet.orbit);
-      system.add(planet.halo);
-      test.scene.add(system);
     })
     .catch((error) => {
       console.log(error)
@@ -210,7 +204,7 @@ function add_planet(name,time){
   console.log(temp);
   // gets rid of baycenter
   for(let i = 0; i < temp.length; i++) {
-      if(temp[i].search("BARYCENTER") < 0 && temp[i] != "SUN"){
+      if(temp[i].search("BARYCENTER") >= 0 && temp[i] != "SUN"){
           objects.push(temp[i]);
       }
     }
