@@ -224,6 +224,10 @@ function add_planet(name,time){
   addButtons(objects, "object_library", "pinned_objects");
 })();
 
+// get mission names from backend 
+var missions_back = [];
+
+
 var missions = ["APOLLO", "BEPICOLOMBO", "CASSINI","CHANDRA", 
 "CLEMENTINE","CONTOUR","DART","DAWN","DEEPIMPACT","DS1","EUROPACLIPPER","EXOMARS2016","FIDO","GIOTTO","GLL","GNS","GRAIL",
 "HAYABUSA", "HELIOS", "HST","INSIGHT","IUE","JUNO","JWST","LADEE","LPM","LRO","LUCY","LUNARORBITER",
