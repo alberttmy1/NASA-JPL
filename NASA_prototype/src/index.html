@@ -39,6 +39,16 @@
         </script>
       </div>
 
+      <button type="button" class = "collapsible" id="kernel_upload_form" >Upload Spice Kernel </button>
+      <div class="content">
+        
+        <form enctype = "multipart/form-data" onsubmit="return false;" >
+          <input id="file" type="file" name="static_file" />
+          <button id="upload-button" onclick="uploadFile(this.form)"> Upload </button>
+        </form>
+        <div id="static_file_response"> </div>
+      </div>
+
       <!--Environment-->
       <button type="button"  class="collapsible">Environment</button>
 

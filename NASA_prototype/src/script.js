@@ -42,6 +42,27 @@ function spice(target_, obs_, utctim_ ){
 }
 window.spice = spice;
 
+function uploadFile(form)
+{
+    const formData = new FormData(form);
+    //var oOutput = document.getElementById("static_file_response");
+    var oReq = new XMLHttpRequest();
+    oReq.open("POST", "https://spice-api.herokuapp.com/upload_static_file", true);
+    oReq.onload = function(oEvent) {
+        if (oReq.status == 200) {
+            //oOutput.innerHTML = "Uploaded!";
+            console.log(oReq.response);
+        }
+        else {
+            oOutput.innerHTML = "Error occurred when trying to upload your file.<br \/>";
+        }
+    };
+    //oOutput.innerHTML = "Sending file!";
+    console.log("Sending file!")
+    oReq.send(formData);
+ }
+ window.uploadFile = uploadFile;
+
 
 //makes an ajax call to ask for planet data
 //includes a promise so that the next function waits for data
