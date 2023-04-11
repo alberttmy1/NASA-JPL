@@ -6,13 +6,30 @@ from flask_restful import Resource, Api, reqparse
 import subprocess
 import requests
 import re
-
+from urllib.request import urlopen
+import json
 
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
 
-# TODO: load all mission and their kernels into ./backend.   
+# loads in all the kernels of a specific mission  
+def load_kernels(mission):
+    # read missions dictionary from the file
+    with open('missions.json', 'r') as f:
+        missions = json.load(f)
+
+    kernel_urls = missions[mission]
+
+    for url in kernel_urls:
+        # Download the kernel file and load it into SPICE
+        with urlopen(url) as f:
+            kernel_data = f.read()
+            spiceypy.furnsh_c(kernel_data)
+        
+        # Use the kernel data
+        # ...
+
 
 @app.after_request
 def after_request(response):
@@ -94,7 +111,3 @@ def index():
 
 if __name__ == "__main__":
     app.run(threaded=True, port=5000)
-
-
-
-
