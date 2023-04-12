@@ -1,5 +1,5 @@
 #
-# Solution getsta.py
+# PLEASE READ: this no longer works. please come to positioningRefactored.
 #
 from __future__ import print_function
 

@@ -49,6 +49,26 @@ for (i = 0; i < coll.length; i++) {
   });
 }
 
+export function uploadFile(form)
+{
+    const formData = new FormData(form);
+    var oOutput = document.getElementById("static_file_response");
+    var oReq = new XMLHttpRequest();
+    oReq.open("POST", "https://spice-api.herokuapp.com/upload_static_file", true);
+    oReq.onload = function(oEvent) {
+        if (oReq.status == 200) {
+            oOutput.innerHTML = "Uploaded!";
+            console.log(oReq.response);
+        }
+        else {
+            oOutput.innerHTML = "Error occurred when trying to upload your file.<br \/>";
+        }
+    };
+    oOutput.innerHTML = "Sending file!";
+    console.log("Sending file!")
+    oReq.send(formData);
+ }
+
 // function to add buttons to collapsible
 export function addButtons(objects, id, pinned) {
   var buttonsContainer = document.getElementById(id);

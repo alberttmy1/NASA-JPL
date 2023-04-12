@@ -42,12 +42,35 @@ function spice(target_, obs_, utctim_ ){
 }
 window.spice = spice;
 
+function uploadFile(form)
+{
+    const formData = new FormData(form);
+    //var oOutput = document.getElementById("static_file_response");
+    var oReq = new XMLHttpRequest();
+    oReq.open("POST", "https://spice-api.herokuapp.com/upload_static_file", true);
+    oReq.onload = function(oEvent) {
+        if (oReq.status == 200) {
+            //oOutput.innerHTML = "Uploaded!";
+            console.log(oReq.response);
+        }
+        else {
+            oOutput.innerHTML = "Error occurred when trying to upload your file.<br \/>";
+        }
+    };
+    //oOutput.innerHTML = "Sending file!";
+    console.log("Sending file!")
+    oReq.send(formData);
+ }
+ window.uploadFile = uploadFile;
+
+
 //makes an ajax call to ask for planet data
 //includes a promise so that the next function waits for data
 function ajax_call(target,time){
+  // var data;
   return new Promise((resolve,reject) => {
     $.ajax({
-      url:'https://spice-api.herokuapp.com/orbits?planet='+target+'&utc='+time,
+      url:'https://spice-api.herokuapp.com/pos?planet='+target+'&utc='+time,
       type: 'GET',
       dataType:'JSON',
       crossDomain: true,
@@ -78,6 +101,7 @@ window.spice_orbit = spice_orbit;
 //ajax call for all planet data
 function ajax_planets(){
   var bodlist;
+  
   return new Promise((resolve,reject) => {
     $.ajax({
       url:'https://spice-api.herokuapp.com/get_body?kernels=kernels/981005_PLTEPH-DE405S.bsp',
@@ -162,9 +186,22 @@ test.scene.add(solarSystem);
 const starTexture = new THREE.TextureLoader().load(images['galaxy.jpg'].default);
 test.scene.background = starTexture;
 
+// Listen for changes to the checkbox
+var envBodyCheckbox = document.getElementById('env_body');
+envBodyCheckbox.addEventListener('change', function() {
+  if (this.checked) {
+    // Set the background to an image if the checkbox is checked
+    test.scene.background = starTexture;
+  } else {
+    // Set the background color to black if the checkbox is unchecked
+    test.scene.clearColor = new THREE.Color(0x000000);
+    test.scene.background = null;
+  }
+});
+
 //array of all planet objects
 const planets = [];
-const date = "2004-06-11T12:00";
+let date =new Date().toISOString();
 //planets
 function add_planet(name,time){
   //makes ajax call with planet name
@@ -175,14 +212,8 @@ function add_planet(name,time){
       var newCoordinates = spice_orbit(data)
       //used default radius need to add dynamically
       //creates new planet object
-      var planet = new Planet(7000, newCoordinates[0], newCoordinates[1], newCoordinates[2],name);
+      var planet = new Planet(7000, newCoordinates[0], newCoordinates[1], newCoordinates[2],name,test);
       planets.push(planet);
-      var planetMesh = planet.getMesh();
-      var system = new THREE.Group();
-      system.add(planetMesh);
-      //system.add(planet.orbit);
-      system.add(planet.halo);
-      test.scene.add(system);
     })
     .catch((error) => {
       console.log(error)
@@ -194,7 +225,7 @@ function add_planet(name,time){
   console.log(temp);
   // gets rid of baycenter
   for(let i = 0; i < temp.length; i++) {
-      if(temp[i].search("BARYCENTER") < 0 && temp[i] != "SUN"){
+      if(temp[i].search("BARYCENTER") >= 0 && temp[i] != "SUN"){
           objects.push(temp[i]);
       }
     }
@@ -207,19 +238,17 @@ function add_planet(name,time){
   // call function to add buttons to collapsible
   addButtons(objects, "object_library", "pinned_objects");
 })();
-// var objects = await(ajax_planets());
 
-//adds planets to solar system
-//dynamic date code
-//let date =new Date().toISOString();
-//date = date.slice(0,-14);
-//date = (date+"T12:00");
-//console.log("hello hi", date);
+// get mission names from backend 
+var missions_back = [];
 
-//add_planet("MERCURY",date);
-//add_planet("VENUS",date);
-//add_planet("EARTH",date);
-//add_planet("MARS",date);
 
-//shows list of planets
-console.log(planets);
+var missions = ["APOLLO", "BEPICOLOMBO", "CASSINI","CHANDRA", 
+"CLEMENTINE","CONTOUR","DART","DAWN","DEEPIMPACT","DS1","EUROPACLIPPER","EXOMARS2016","FIDO","GIOTTO","GLL","GNS","GRAIL",
+"HAYABUSA", "HELIOS", "HST","INSIGHT","IUE","JUNO","JWST","LADEE","LPM","LRO","LUCY","LUNARORBITER",
+"M01", "M10",  "M2", "M9", "MARS2020", "MAVEN", "MCO", "MER", "MESSENGER", "MEX", "MGN", "MGS", "MPF", "MPL", "MRO", 
+"MSL", "MSR", "NEAR", "NEWHORIZONS", "NOZOMI", "ORX", "PHOBOS88", "PHOENIX", "PHSRM", "PIONEER10", "PIONEER11", "PIONEER12", 
+"PIONEER6", "PIONEER8", "PSYCHE", "ROCKY7", "ROSETTA", "SDU", "SELENE", "SIRTF", "SMAP", "SMART1", "SPP", "STEREO", "TDRSS", 
+"THEMIS", "ULYSSES", "VEGA", "VEX", "VIKING", "VOYAGER"]; 
+
+addButtons(missions, "mission_library", "pinned_missions");

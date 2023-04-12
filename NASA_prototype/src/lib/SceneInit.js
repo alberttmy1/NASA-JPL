@@ -8,7 +8,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass';
 
 export default class SceneInit {
-  constructor(fov = 36, camera, scene, stats, controls, renderer) {
+  constructor(fov = 5, camera, scene, stats, controls, renderer) {
     this.fov = fov;
     this.scene = scene;
     this.stats = stats;

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
     <!-- <script onLoad = "load()" type="text/javascript" src = "script.js"></script> -->
 </head>
 <body>
@@ -17,15 +18,35 @@
     </div>
 
     <div class="sidenav">
-      <button type="button" class = "collapsible" id="spice_test" >Test Spice </button>
+      <button type="button" class = "collapsible" id="spice_form" >Test Spice </button>
       <div class="content">
-        <form class="" action="spice()" method="post">
-          <label for="METAKR">Kernel Name:</label><br>
-          <input type="text" id="METAKR" name="METAKR"><br>
-          <label for="target">Target:</label><br>
-          <input type="text" id="Target" name="Target">
-          <button type="button" id ="spice_test" onclick="spice()">Send</button>
-        </form> 
+        
+        <form id="spicey"action="">
+          Planet: <input type="text" name="Planet" value="Earth"><br>
+          Time: <input type="text" name="Time" value="2004 jun 11 19:32:00"><br>
+        </form>
+
+        <button id="submit_spice">Serialize form values</button>
+        <script>
+          $(document).ready(function(){
+            $("#submit_spice").click(function(){
+              console.log("serializing")
+              var str = $("#spicey").serialize();
+              console.log(str)
+              spice_form(str)
+            });
+          });
+        </script>
+      </div>
+
+      <button type="button" class = "collapsible" id="kernel_upload_form" >Upload Spice Kernel </button>
+      <div class="content">
+        
+        <form enctype = "multipart/form-data" onsubmit="return false;" >
+          <input id="file" type="file" name="static_file" />
+          <button id="upload-button" onclick="uploadFile(this.form)"> Upload </button>
+        </form>
+        <div id="static_file_response"> </div>
       </div>
 
       <!--Environment-->
