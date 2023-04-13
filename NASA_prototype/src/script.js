@@ -42,6 +42,28 @@ function spice(target_, obs_, utctim_ ){
 }
 window.spice = spice;
 
+function spice_form(query){
+  console.log("spice function entered")
+  var newCoordinates = []; //new coordinates
+  $.ajax({
+    url:'https://spice-api.herokuapp.com/orbits/'+query,
+    type: 'GET',
+    dataType:'JSON',
+    success:function(data){
+      alert(data.x + " "+ data.y + " "+ data.z);
+      newCoordinates[0] = data.x;
+      newCoordinates[1] = data.y;
+      newCoordinates[2] = data.z;
+    },
+    error:function(xhr,status,error){
+      var errorMessage = xhr.status + ':' + xhr.statusText
+      alert('Error - ' + errorMessage);
+    }
+  }); 
+  return newCoordinates;
+}
+window.spice = spice;
+
 function uploadFile(form)
 {
     const formData = new FormData(form);
