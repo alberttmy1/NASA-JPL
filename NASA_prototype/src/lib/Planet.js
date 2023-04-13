@@ -7,8 +7,9 @@ import * as THREE from "three";
 //pos.unshift([x,y,z]) adds new planet position to front
 
 export default class Planet {
-  constructor(radius, positionX, positionY, positionZ, name, screen/*, textureFile*/) {
+  constructor(radius, positionX, positionY, positionZ, name, screen, date/*, textureFile*/) {
     this.screen = screen;
+    this.date = date;
     this.radius = this.toAU(radius);
     this.pos = [[this.toAU(positionX),this.toAU(positionY),this.toAU(positionZ)]];
     //not using textures currently
@@ -61,10 +62,10 @@ export default class Planet {
 
   //not using orbits currently
   createOrbit() {
-    //date not currently used
-    const date = new Date();
     //ajax call for orbit info
-    this.ajax_call(this.name,date,10000)
+    //this is how many days long the orbit is
+    let orbitlength = 10000
+    this.ajax_call(this.name,this.date,orbitlength)
       .then((data) => {
         //creates line basics
         var orbitLine = new THREE.BufferGeometry();
