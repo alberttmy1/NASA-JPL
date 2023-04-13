@@ -201,7 +201,9 @@ envBodyCheckbox.addEventListener('change', function() {
 
 //array of all planet objects
 const planets = [];
+//this date changes planets+orbits
 let date =new Date().toISOString();
+//let date = '2020-04-13T03:39:06.747Z';
 //planets
 function add_planet(name,time){
   //makes ajax call with planet name
@@ -212,7 +214,7 @@ function add_planet(name,time){
       var newCoordinates = spice_orbit(data)
       //used default radius need to add dynamically
       //creates new planet object
-      var planet = new Planet(7000, newCoordinates[0], newCoordinates[1], newCoordinates[2],name,test);
+      var planet = new Planet(7000, newCoordinates[0], newCoordinates[1], newCoordinates[2],name,test,time);
       planets.push(planet);
     })
     .catch((error) => {
