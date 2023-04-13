@@ -42,10 +42,10 @@ export default class Planet {
         if(scaled<=255){
             color = [0.0,update,1.0];
         }
-        else if(scaled<=255){
+        else if(scaled<=510){
             color = [0.0,1.0,1.0-update];
         }
-        else if(scaled<=255){
+        else if(scaled<=765){
             color = [update,1.0,0.0];
         }
         else{
