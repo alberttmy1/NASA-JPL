@@ -21,6 +21,9 @@ def get_bsp_links(mission):
         href = link.get("href")
         if href and href.endswith(".bsp"):
             links.append(href)
+        if href and href.endswith(".tls"):
+            links.append(href)
+            print(href)
     return links
 
 for m in missions: 
