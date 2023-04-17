@@ -70,8 +70,9 @@ export function uploadFile(form)
  }
 
 // function to add buttons to collapsible
-export function addButtons(objects, id, pinned) {
+export function addButtons(objects, id, pinned, planets) {
   var buttonsContainer = document.getElementById(id);
+  i = 0;
   objects.forEach(function(objects) {
     var button = document.createElement("button");
     button.innerHTML = objects;
@@ -123,7 +124,7 @@ export function addButtons(objects, id, pinned) {
     // BODY
     var checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.id = "env_body";
+    checkbox.id = objects + "_body";
     checkbox.value = "Body";
     checkbox.name = "showBody";
     checkbox.checked = true;
@@ -137,7 +138,7 @@ export function addButtons(objects, id, pinned) {
     // TRAJECTORY
     var checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.id = "env_traj";
+    checkbox.id = objects + "_traj";
     checkbox.value = "Trajectory";
     checkbox.name = "showTraj";
     checkbox.checked = true;
@@ -176,5 +177,7 @@ export function addButtons(objects, id, pinned) {
         content.style.display = "block";
       }
     });
+
+    i += 1;
   });
 }

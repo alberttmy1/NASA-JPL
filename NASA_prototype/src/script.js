@@ -17,7 +17,7 @@ function importAll(r) {
 
 //test spice function
 function spice(target_, obs_, utctim_ ){
-    console.log("spice function entered")
+    //console.log("spice function entered")
     var newCoordinates = []; //new coordinates
     $.ajax({
       url:'https://spice-api.herokuapp.com/orbits',
@@ -90,10 +90,10 @@ function ajax_call(target,time){
 
 //takes data from ajax call and returns the coordinates
 function spice_orbit(data){
-    console.log("spice orbit function entered")
+    //console.log("spice orbit function entered")
     var newCoordinates = new Array(); //new coordinates
     newCoordinates = [data.x,data.y,data.z];
-    console.log("Planet Coords",newCoordinates);
+    //console.log("Planet Coords",newCoordinates);
     return newCoordinates;
 }
 window.spice_orbit = spice_orbit;
@@ -210,12 +210,34 @@ function add_planet(name,time){
   ajax_call(name,time)
   //if data received then adds planet
     .then((data) => {
-      console.log(name);
+      //console.log(name);
       var newCoordinates = spice_orbit(data)
       //used default radius need to add dynamically
       //creates new planet object
       var planet = new Planet(7000, newCoordinates[0], newCoordinates[1], newCoordinates[2],name,test,time);
       planets.push(planet);
+
+      // Listen for changes to the show/hide body checkbox
+      var objBodyCheckbox = document.getElementById(name + '_body');
+      objBodyCheckbox.addEventListener('change', function() {
+        if (!this.checked) {
+          test.scene.remove(planet.mesh);
+          test.scene.remove(planet.halo);
+        } else {
+          test.scene.add(planet.mesh);
+          test.scene.add(planet.halo);
+        }
+      });
+
+      // Listen for changes to the show/hide trajectory checkbox
+      var objTrajCheckbox = document.getElementById(name + '_traj');
+      objTrajCheckbox.addEventListener('change', function() {
+        if (!this.checked) {
+          test.scene.remove(planet.orbit);
+        } else {
+          test.scene.add(planet.orbit);
+        }
+      });
     })
     .catch((error) => {
       console.log(error)
@@ -224,26 +246,25 @@ function add_planet(name,time){
 (async () => {
   var objects = [];
   var temp = await(ajax_planets());
-  console.log(temp);
+  //console.log(temp);
   // gets rid of baycenter
   for(let i = 0; i < temp.length; i++) {
       if(temp[i].search("BARYCENTER") >= 0 && temp[i] != "SUN"){
           objects.push(temp[i]);
       }
     }
-  console.log(objects);
+
   //add planets 
   for(let x = 0; x < objects.length; x++){
     add_planet(objects[x],date);
   }
 
   // call function to add buttons to collapsible
-  addButtons(objects, "object_library", "pinned_objects");
+  addButtons(objects, "object_library", "pinned_objects", planets);
 })();
 
 // get mission names from backend 
 var missions_back = [];
-
 
 var missions = ["APOLLO", "BEPICOLOMBO", "CASSINI","CHANDRA", 
 "CLEMENTINE","CONTOUR","DART","DAWN","DEEPIMPACT","DS1","EUROPACLIPPER","EXOMARS2016","FIDO","GIOTTO","GLL","GNS","GRAIL",

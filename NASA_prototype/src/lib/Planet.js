@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import SceneInit from "./SceneInit";
 
 //pos is array of planet positions
 //check if pos[0] is equal to current days planet position
@@ -22,7 +23,9 @@ export default class Planet {
     this.name = name;
     //orbit shit
     this.orbit = undefined;
+    this.orbit_plain = undefined;
     this.halo = this.createHalo();
+    this.system = undefined;
     this.createOrbit()
   }
 
@@ -131,12 +134,15 @@ export default class Planet {
 
         line.position.set(0,0,0);
         this.orbit = line;
+
         //creates planet mesh, adds to solarsystem
         var planetMesh = this.getMesh();
         var system = new THREE.Group();
         system.add(planetMesh);
         system.add(this.orbit);
         system.add(this.halo);
+        system.name = this.name + "_system";
+        this.system = system;
         this.screen.scene.add(system);
       });
   };
@@ -179,6 +185,7 @@ export default class Planet {
     line.position.set(this.xPos, this.yPos, this.zPos);
     return line;
   }
+
   //will be used to display planet name near planet
   /*displayName(){
 
