@@ -38,12 +38,12 @@ body{
 background-color: #eee;
 color: #444;
 cursor: pointer;
-padding: 18px;
-width: 100%;
 border: none;
 text-align: left;
 outline: none;
 font-size: 15px;
+width: auto;
+min-width: 150px;
 }
 .collapsible i {
   margin-left: auto;
@@ -169,3 +169,161 @@ display: table;
   text-decoration: none;
   cursor: pointer;
 }
+
+body {
+  background-color: black;
+}
+
+/* menu style */
+#menu-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #c7c7c7;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+#menu-bar ul {
+  list-style: none;
+  margin: 10;
+  padding: 10;
+  display: flex;
+  align-items: center;
+}
+
+#menu-bar li {
+  display: inline-block;
+  position: relative; 
+  margin-right: 20px;
+}
+
+#menu-bar li:last-child {
+  margin-right: 0;
+}
+
+#menu-bar a {
+  text-decoration: none;
+  color: black;
+  font-size: 16px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+#backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 500;
+  background-image: url("./assets/galaxy.jpg");
+  background-size: cover;
+  opacity: 0.5;
+}
+#menu-bar .sub-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #c7c7c7;
+  padding: 10px;
+  display: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+#menu-bar li:hover .sub-menu {
+  display: block;
+  position: absolute; 
+  top: 100%; 
+  left: 0; 
+  width: auto;
+  min-width: 150px;
+}
+
+#menu-bar .sub-menu li {
+  margin-bottom: 10px;
+}
+
+#menu-bar .sub-menu a {
+  color: black;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 14px;
+}
+
+.main-nav {
+  list-style-type: none;
+  display: flex; /* Display as flex container */
+  justify-content: flex-start; /* Align items to the start of the flex container */
+}
+
+.collapsible {
+  text-align: left;
+  padding: 15px;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+}
+
+.sub-nav {
+  list-style-type: none;
+  padding-left: 20px;
+  margin-top: 0;
+  margin-bottom: 0;
+  display: none; /* Hide sub-buttons by default */
+}
+
+.sub-nav li {
+  margin-bottom: 5px;
+}
+
+.sub-nav .collapsible {
+  background-color: #e0e0e0;
+}
+
+#pinned_objects, #object_library, #pinned_missions, #mission_library {
+  display: block;
+  /* Add any custom margin or padding to adjust their positioning */
+  margin-left: 10px; /* Example margin */
+}
+
+#object_library .collapsible, #mission_library .collapsible {
+  display: block;
+  /* Add any custom margin or padding to adjust their positioning */
+  margin-top: 10px; /* Example margin */
+}
+/* Example CSS selector for the parent element of your menu */
+.parent-element {
+  overflow: hidden;
+}
+
+.main-menu {
+  display: flex;
+  background-color: #f0f0f0;
+  /* Additional styles for main menu */
+}
+
+.main-menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.main-menu li {
+  position: relative;
+}
+
+.main-menu a {
+  display: block;
+  padding: 10px;
+  /* Additional styles for main menu item */
+}
+
+.sub-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;
+  /* Additional styles for expandable sections */
+}
+

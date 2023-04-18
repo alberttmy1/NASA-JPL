@@ -17,84 +17,93 @@
         <canvas id="myThreeJsCanvas" >
     </div>
 
-    <div class="sidenav">
-      <button type="button" class = "collapsible" id="spice_form" >Test Spice </button>
-      <div class="content">
+    <div id="menu-bar">
+      <ul>
+        <li><a href="#">Home </a></li>
         
-        <form id="spicey"action="">
-          Planet: <input type="text" name="Planet" value="Earth"><br>
-          Time: <input type="text" name="Time" value="2004 jun 11 19:32:00"><br>
-        </form>
-
-        <button id="submit_spice">Serialize form values</button>
-        <script>
-          $(document).ready(function(){
-            $("#submit_spice").click(function(){
-              console.log("serializing")
-              var str = $("#spicey").serialize();
-              console.log(str)
-              spice_form(str)
-            });
-          });
-        </script>
-      </div>
-
-      <button type="button" class = "collapsible" id="kernel_upload_form" >Upload Spice Kernel </button>
-      <div class="content">
-        
-        <form enctype = "multipart/form-data" onsubmit="return false;" >
-          <input id="file" type="file" name="static_file" />
-          <button id="upload-button" onclick="uploadFile(this.form)"> Upload </button>
-        </form>
-        <div id="static_file_response"> </div>
-      </div>
-
-      <!--Environment-->
-      <button type="button"  class="collapsible">Environment</button>
-
-      <div class="content">
-        <input type="checkbox" id="env_body" name="showBody" value="Body" checked>
-        <label for="env_body"> Show Solar System</label><br>
-        <input type="checkbox" id="env_traj" name="showTraj" value="Trajectory" checked>
-        <label for="env_traj"> Show All Trajectories</label><br>
-        <input type="checkbox" id="env_grad" name="showGrad" value="Speed Gradient">
-        <label for="env_grad"> Show All Speed Gradients</label><br>
-      </div>
-      <!--Objects-->
-      <button type="button" id="missions-btn" class="collapsible">
-        Objects 
-      </button>
-      <div class="content">
-        <div id="objects">
-          <button type="button"  class="collapsible">Pinned Objects</button>
-          <div class="content" id = "pinned_objects">
-          </div>
-
-          <button type="button"  class="collapsible">Objects Library</button>
-          <div class="content" id = "object_library">
-            <input type="text" placeholder="Search Objects.." id="objectInput" onkeyup="searchObjects()">
-          </div>
-        </div>
-      </div>
-      <!--Trajectories-->
-      <button type="button" id="missions-btn" class="collapsible">Missions 
-      </button>
-      <div class="content">
-        <div id="missions">
-          <button type="button"  class="collapsible">Pinned Missions</button>
-          <div class="content" id = "pinned_missions">
-          </div>
-
-          <button type="button"  class="collapsible">Missions Library</button>
-          <div class="content" id = "mission_library">
-            <input type="text" placeholder="Search Missons.." id="missionInput" onkeyup="searchMissions()">
-          </div>
-          
-        </div>
-      </div>
-
+        <li><a href="#">Test Spice</a>
+          <ul class="sub-menu">
+            <li>
+              <form id="spicey"action="">
+                Planet: <input type="text" name="Planet" value="Earth"><br>
+                Time: <input type="text" name="Time" value="2004 jun 11 19:32:00"><br>
+              </form>
+      
+              <button id="submit_spice">Serialize form values</button>
+              <script>
+                $(document).ready(function(){
+                  $("#submit_spice").click(function(){
+                    console.log("serializing")
+                    var str = $("#spicey").serialize();
+                    console.log(str)
+                    spice_form(str)
+                  });
+                });
+              </script>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#">Upload Kernel</a>
+          <ul class="sub-menu">
+            <li>
+              <form enctype = "multipart/form-data" onsubmit="return false;" >
+                <input id="file" type="file" name="static_file" />
+                <button id="upload-button" onclick="uploadFile(this.form)"> Upload </button>
+              </form>
+              <div id="static_file_response"> </div>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#">Environment</a>
+          <ul class="sub-menu">
+            <li>
+              <input type="checkbox" id="env_body" name="showBody" value="Body" checked>
+              <label for="env_body"> Show Solar System</label>
+            </li>
+            <li>
+                <input type="checkbox" id="env_traj" name="showTraj" value="Trajectory" checked>
+                <label for="env_traj"> Show All Trajectories</label>
+            </li>
+            <li>
+                <input type="checkbox" id="env_grad" name="showGrad" value="Speed Gradient">
+                <label for="env_grad"> Show All Speed Gradients</label>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#">Objects</a>
+          <ul class="sub-menu">
+            <li>
+              <button type="button"  class="collapsible">Pinned Objects</button>
+              <div class="content" id = "pinned_objects">
+              </div>
+            </li>
+            <li>
+              <button type="button"  class="collapsible">Objects Library</button>
+              <div class="content" id = "object_library">
+                <input type="text" placeholder="Search Objects.." id="objectInput" onkeyup="searchObjects()">
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#">Missions</a>
+          <ul class="sub-menu">
+            <li>
+              <button type="button"  class="collapsible">Pinned Missions</button>
+              <div class="content" id = "pinned_missions">
+              </div>
+            </li>
+            <li>
+              <button type="button"  class="collapsible">Missions Library</button>
+              <div class="content" id = "mission_library">
+                <input type="text" placeholder="Search Missons.." id="missionInput" onkeyup="searchMissions()">
+              </div>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
-    <!--Sidebar-->
+    <!--End Menu Bar-->
+
     <script src="functions.js"></script>
   </body>
 </html>

@@ -5,6 +5,8 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 // import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
 import font_file from '../fonts/Bebas_Neue_Regular.json';
 import dro from 'three/examples/fonts/droid/droid_serif_regular.typeface.json';
+import SceneInit from "./SceneInit";
+
 //pos is array of planet positions
 //check if pos[0] is equal to current days planet position
 //if not
@@ -16,19 +18,58 @@ export default class Planet {
     this.screen = screen;
     this.date = date;
     this.radius = this.toAU(radius);
-    this.pos = [[this.toAU(positionX),this.toAU(positionY),this.toAU(positionZ)]];
+    this.xPos = this.toAU(positionX);
+    this.yPos = this.toAU(positionY);
+    this.zPos = this.toAU(positionZ);
+    this.pos = [];
+    this.velocityVectors = [];
+    this.velocities = [];
     //not using textures currently
     //this.textureFile = textureFile;
     this.name = name;
     //orbit shit
     this.orbit = undefined;
+    this.orbit_white = undefined;
     this.halo = this.createHalo();
-    this.createOrbit();
+    // this.createOrbit();
     // this.textName = this.displayName(name, this.toAU(positionX),this.toAU(positionY),this.toAU(positionZ));
+    this.system = undefined;
+    this.createWhiteOrbit();
+    this.createOrbit();
   }
 
   toAU(km){
     return km * 6.6845871226706 * (10 ** -9);
+  };
+  
+  getColors(velocities){
+    let colors = [];
+    //assigns colors to velocites
+    for(let i=0; i<velocities.length;i++){
+      //first two numbers can be changed for scale of velocities
+        let scaled = this.scale(0.00000005,0.0000001,0,1020,velocities[i]);
+        //scales from 0-1
+        let update = this.scale(0,255,0,1,(scaled%255));
+        let color = [0,0,0]
+        if(scaled<=255){
+            color = [0.0,update,1.0];
+        }
+        else if(scaled<=510){
+            color = [0.0,1.0,1.0-update];
+        }
+        else if(scaled<=765){
+            color = [update,1.0,0.0];
+        }
+        else{
+            color = [1.0,1.0-update,0.0];
+        }
+        colors.push(color);
+    }
+    return colors
+  };
+  //scales numbers
+  scale(rmin,rmax,tmin,tmax,m){
+      return(((m-rmin)/(rmax-rmin))*(tmax-tmin)+tmin)
   };
 
   getMesh() {
@@ -40,10 +81,10 @@ export default class Planet {
       const material = new THREE.MeshBasicMaterial();
       this.mesh = new THREE.Mesh(geometry, material);
       //adds current position to mesh
-      console.log(this.name,"pos",this.pos);
-      this.mesh.position.x = this.pos[0][0];
-      this.mesh.position.y = this.pos[0][1];
-      this.mesh.position.z = this.pos[0][2];
+      //console.log(this.name,"pos",this.pos);
+      this.mesh.position.x = this.xPos;
+      this.mesh.position.y = this.yPos;
+      this.mesh.position.z = this.zPos;
 
     }
     return this.mesh;
@@ -66,46 +107,83 @@ export default class Planet {
     })
   };
 
+  createWhiteOrbit(){
+    const orbitLine = new THREE.BufferGeometry();
+    orbitLine.setAttribute('position', new THREE.Float32BufferAttribute(this.pos.flat(), 3));
+    orbitLine.setAttribute('color', new THREE.Float32BufferAttribute(new Array(this.pos.length).fill(1), 3));
+    orbitLine.computeBoundingSphere();
+
+    //attributes of line
+    var material = new THREE.LineBasicMaterial({
+      color: "white",
+      vertexColors: true,
+      linewidth: 10,
+      fog: true
+    });
+
+    var line = new THREE.Line(orbitLine, material);
+    line.computeLineDistances();
+    line.position.set(0, 0, 0);
+
+    this.orbit_white = line;
+  }
+
   //not using orbits currently
   createOrbit() {
     //ajax call for orbit info
     //this is how many days long the orbit is
-    let orbitlength = 10000
+    let orbitlength = 10000;
     this.ajax_call(this.name,this.date,orbitlength)
       .then((data) => {
-        //creates line basics
-        var orbitLine = new THREE.BufferGeometry();
+        //adds all positions and velocity vectors to arrays
+        
+        for(let i=0; i<data.length; i++){
+          this.pos.push([this.toAU(data[i][0]),this.toAU(data[i][1]),this.toAU(data[i][2])]);
+          this.velocityVectors.push([this.toAU(data[i][3]),this.toAU(data[i][4]),this.toAU(data[i][5])]);
+        }
+        //gets magnitude of velocity
+        for(let i=0; i<this.velocityVectors.length; i++){
+          this.velocities.push(Math.sqrt(Math.pow(this.velocityVectors[i][0],2)+Math.pow(this.velocityVectors[i][1],2)+Math.pow(this.velocityVectors[i][2],2)))
+        }
+
+        let colors = this.getColors(this.velocities);
+        //creates line
+        const orbitLine = new THREE.BufferGeometry();
+        orbitLine.setAttribute( 'position', new THREE.Float32BufferAttribute( this.pos.flat(), 3 ) );
+        orbitLine.setAttribute( 'color', new THREE.Float32BufferAttribute( colors.flat(), 3 ) );
+        orbitLine.computeBoundingSphere();
+        //attributes of line
         var material = new THREE.LineBasicMaterial({
-          color: 'darkred',
+          //color: 'darkred',
+          vertexColors: true,
           linewidth: 5,
           fog: true
         });
-        for(let i=0; i<data.length; i++){
-          this.pos.push([this.toAU(data[i][0]),this.toAU(data[i][1]),this.toAU(data[i][2])]);
-        }
-
-        orbitLine.setAttribute( 'position', new THREE.Float32BufferAttribute( this.pos.flat(), 3 ) );
-        orbitLine.computeBoundingSphere();
         var line = new THREE.Line(orbitLine, material);
         console.log("font:" + Object.values(font_file));
         console.log("dro" + Object.values(dro));
         line.position.set(0,0,0);
+        line.name = this.name + "_orbit";
         this.orbit = line;
         //creates planet mesh, adds to solarsystems
         var planetMesh = this.getMesh();
+        planetMesh.name = this.name + "_mesh";
         var system = new THREE.Group();
         system.add(planetMesh);
         system.add(this.orbit);
         system.add(this.halo);
         // system.add(this.textName);
         this.screen.scene.add(system);
+        //console.log("system:" + system);
+
+        return system;
       });
   };
 
   //creates halo for planet visibility, uses orbit code
   createHalo(){
 
-    var resolution = this.pos[0][0] + 15 * 50; // segments in the line
+    var resolution = this.xPos + 15 * 50; // segments in the line
     var length = 360 / resolution;
     var orbitLine = new THREE.BufferGeometry();
     var material = new THREE.LineBasicMaterial({
@@ -137,7 +215,7 @@ export default class Planet {
 		orbitLine.computeBoundingSphere();
     var line = new THREE.Line(orbitLine, material);
 
-    line.position.set(this.pos[0][0], this.pos[0][1], this.pos[0][2]);
+    line.position.set(this.xPos, this.yPos, this.zPos);
     return line;
   }
   
