@@ -239,7 +239,7 @@ function add_planet(name,time){
         }
       });
       
-      // Listen for changes to the show/hide trajectory checkbox
+      // Listen for changes to the show/hide gradient checkbox
       var objGradCheckbox = document.getElementById(name + '_grad');
       objGradCheckbox.addEventListener('change', function() {
         if (!this.checked) {
