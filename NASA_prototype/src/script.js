@@ -120,6 +120,26 @@ function ajax_planets(){
   })
 }
 
+
+function mission_data(mission){
+  return new Promise((resolve,reject) => {
+    $.ajax({
+      url:'https://spice-api.herokuapp.com/mission?mission=' + mission,
+      type: 'GET',
+      dataType:'JSON',
+      crossDomain: true,
+      success:function(data){
+        resolve(data);
+      },
+      error:function(xhr,status,error){
+        var errorMessage = xhr.status + ':' + xhr.statusText
+        reject(data);
+        alert('Error - ' + errorMessage);
+      }
+    })
+  })
+}
+
 //loads images
 const images = importAll(require.context('./assets', false, /\.(png|jpe?g|svg)$/));
 
@@ -255,6 +275,9 @@ function add_planet(name,time){
       console.log(error)
     })
 }
+
+console.log(mission_data("APOLLO"));
+
 (async () => {
   var objects = [];
   var temp = await(ajax_planets());
