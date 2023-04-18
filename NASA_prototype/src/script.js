@@ -238,6 +238,18 @@ function add_planet(name,time){
           test.scene.add(planet.orbit);
         }
       });
+      
+      // Listen for changes to the show/hide trajectory checkbox
+      var objGradCheckbox = document.getElementById(name + '_grad');
+      objGradCheckbox.addEventListener('change', function() {
+        if (!this.checked) {
+          test.scene.remove(planet.orbit);
+          test.scene.add(planet.orbit_white);
+        } else {
+          test.scene.remove(planet.orbit_white);
+          test.scene.add(planet.orbit);
+        }
+      });
     })
     .catch((error) => {
       console.log(error)

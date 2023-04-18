@@ -152,7 +152,7 @@ export function addButtons(objects, id, pinned, planets) {
     // SPEED GRADIENT
     var checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.id = "env_grad";
+    checkbox.id = objects + "_grad";
     checkbox.value = "Gradient";
     checkbox.name = "showGrab";
     checkbox.checked = true;

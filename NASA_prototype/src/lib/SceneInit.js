@@ -84,7 +84,7 @@ export default class SceneInit {
   render() {
     //composer.render(this.scene, this.camera);
     this.renderer.render(this.scene, this.camera);
-    console.log("rendered");
+    //console.log("rendered");
   }
 
   onWindowResize() {

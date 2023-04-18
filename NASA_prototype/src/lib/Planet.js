@@ -23,10 +23,11 @@ export default class Planet {
     this.name = name;
     //orbit shit
     this.orbit = undefined;
-    this.orbit_plain = undefined;
+    this.orbit_white = undefined;
     this.halo = this.createHalo();
     this.system = undefined;
-    this.createOrbit()
+    this.createWhiteOrbit();
+    this.createOrbit();
   }
 
   toAU(km){
@@ -72,7 +73,7 @@ export default class Planet {
       const material = new THREE.MeshBasicMaterial();
       this.mesh = new THREE.Mesh(geometry, material);
       //adds current position to mesh
-      console.log(this.name,"pos",this.pos);
+      //console.log(this.name,"pos",this.pos);
       this.mesh.position.x = this.xPos;
       this.mesh.position.y = this.yPos;
       this.mesh.position.z = this.zPos;
@@ -97,6 +98,27 @@ export default class Planet {
           });
     })
   };
+
+  createWhiteOrbit(){
+    const orbitLine = new THREE.BufferGeometry();
+    orbitLine.setAttribute('position', new THREE.Float32BufferAttribute(this.pos.flat(), 3));
+    orbitLine.setAttribute('color', new THREE.Float32BufferAttribute(new Array(this.pos.length).fill(1), 3));
+    orbitLine.computeBoundingSphere();
+
+    //attributes of line
+    var material = new THREE.LineBasicMaterial({
+      color: "white",
+      vertexColors: true,
+      linewidth: 10,
+      fog: true
+    });
+
+    var line = new THREE.Line(orbitLine, material);
+    line.computeLineDistances();
+    line.position.set(0, 0, 0);
+
+    this.orbit_white = line;
+  }
 
   //not using orbits currently
   createOrbit() {
@@ -133,17 +155,23 @@ export default class Planet {
         line.computeLineDistances();
 
         line.position.set(0,0,0);
+        line.name = this.name + "_orbit";
         this.orbit = line;
 
         //creates planet mesh, adds to solarsystem
         var planetMesh = this.getMesh();
+        planetMesh.name = this.name + "_mesh";
         var system = new THREE.Group();
         system.add(planetMesh);
         system.add(this.orbit);
         system.add(this.halo);
+        this.halo.name = this.name + "_halo";
         system.name = this.name + "_system";
         this.system = system;
         this.screen.scene.add(system);
+        //console.log("system:" + system);
+
+        return system;
       });
   };
 
