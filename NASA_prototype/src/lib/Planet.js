@@ -1,10 +1,10 @@
 import * as THREE from "three";
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
-// import { TextGeometry} from "three";
-// import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
-import font_file from '../fonts/Bebas_Neue_Regular.json';
-import dro from 'three/examples/fonts/droid/droid_serif_regular.typeface.json';
+//import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
+//import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+ //import { TextGeometry} from "three";
+ //import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
+//import font_file from '../fonts/Bebas_Neue_Regular.json';
+//import dro from 'three/examples/fonts/droid/droid_serif_regular.typeface.json';
 import SceneInit from "./SceneInit";
 
 //pos is array of planet positions
@@ -29,12 +29,9 @@ export default class Planet {
     this.name = name;
     //orbit shit
     this.orbit = undefined;
-    this.orbit_white = undefined;
     this.halo = this.createHalo();
-    // this.createOrbit();
     // this.textName = this.displayName(name, this.toAU(positionX),this.toAU(positionY),this.toAU(positionZ));
     this.system = undefined;
-    this.createWhiteOrbit();
     this.createOrbit();
   }
 
@@ -72,6 +69,11 @@ export default class Planet {
       return(((m-rmin)/(rmax-rmin))*(tmax-tmin)+tmin)
   };
 
+  updateLine(){
+    this.orbit.material.vertexColors = !this.orbit.material.vertexColors;
+    this.orbit.material.needsUpdate = true;
+  }
+
   getMesh() {
     if (this.mesh === undefined || this.mesh === null) {
       const geometry = new THREE.SphereGeometry(this.radius);
@@ -107,26 +109,6 @@ export default class Planet {
     })
   };
 
-  createWhiteOrbit(){
-    const orbitLine = new THREE.BufferGeometry();
-    orbitLine.setAttribute('position', new THREE.Float32BufferAttribute(this.pos.flat(), 3));
-    orbitLine.setAttribute('color', new THREE.Float32BufferAttribute(new Array(this.pos.length).fill(1), 3));
-    orbitLine.computeBoundingSphere();
-
-    //attributes of line
-    var material = new THREE.LineBasicMaterial({
-      color: "white",
-      vertexColors: true,
-      linewidth: 10,
-      fog: true
-    });
-
-    var line = new THREE.Line(orbitLine, material);
-    line.computeLineDistances();
-    line.position.set(0, 0, 0);
-
-    this.orbit_white = line;
-  }
 
   //not using orbits currently
   createOrbit() {
@@ -160,8 +142,6 @@ export default class Planet {
           fog: true
         });
         var line = new THREE.Line(orbitLine, material);
-        console.log("font:" + Object.values(font_file));
-        console.log("dro" + Object.values(dro));
         line.position.set(0,0,0);
         line.name = this.name + "_orbit";
         this.orbit = line;
