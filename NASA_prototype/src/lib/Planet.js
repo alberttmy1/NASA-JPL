@@ -41,10 +41,14 @@ export default class Planet {
   
   getColors(velocities){
     let colors = [];
+    let max = Math.max(...velocities);
+    let min = Math.min(...velocities);
     //assigns colors to velocites
     for(let i=0; i<velocities.length;i++){
       //first two numbers can be changed for scale of velocities
-        let scaled = this.scale(0.00000005,0.0000001,0,1020,velocities[i]);
+        //let scaled = this.scale(0.00000005,0.0000001,0,1020,velocities[i]);
+        let scaled = this.scale(min,max,0,1020,velocities[i]);
+
         //scales from 0-1
         let update = this.scale(0,255,0,1,(scaled%255));
         let color = [0,0,0]
