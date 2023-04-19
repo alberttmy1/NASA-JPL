@@ -110,16 +110,6 @@ function ajax_call(target,time){
   })
 }
 
-//takes data from ajax call and returns the coordinates
-function spice_orbit(data){
-    //console.log("spice orbit function entered")
-    var newCoordinates = new Array(); //new coordinates
-    newCoordinates = [data.x,data.y,data.z];
-    //console.log("Planet Coords",newCoordinates);
-    return newCoordinates;
-}
-window.spice_orbit = spice_orbit;
-
 //ajax call for all planet data
 function ajax_planets(){
   var bodlist;
@@ -158,28 +148,6 @@ function mission_data(mission, utc){
   })
 }
 window.mission_data = mission_data;
-
-
-
-
-// function mission_data(mission, utc){
-//   return new Promise((resolve,reject) => {
-//     $.ajax({
-//       url:'https://spice-api.herokuapp.com/mission?mission=' + mission + '&utc='+utc,
-//       type: 'GET',
-//       dataType:'JSON',
-//       crossDomain: true,
-//       success:function(data){
-//         resolve(data);
-//       },
-//       error:function(xhr,status,error){
-//         var errorMessage = xhr.status + ':' + xhr.statusText
-//         reject(data);
-//         alert('Error - ' + errorMessage);
-//       }
-//     })
-//   })
-// }
 
 //loads images
 const images = importAll(require.context('./assets', false, /\.(png|jpe?g|svg)$/));
@@ -271,11 +239,9 @@ function add_planet(name,time){
   ajax_call(name,time)
   //if data received then adds planet
     .then((data) => {
-      //console.log(name);
-      var newCoordinates = spice_orbit(data)
       //used default radius need to add dynamically
       //creates new planet object
-      var planet = new Planet(7000, newCoordinates[0], newCoordinates[1], newCoordinates[2],name,test,time);
+      var planet = new Planet(data.r, data.x, data.y, data.z,name,test,time);
       planets.push(planet);
 
       // Listen for changes to the show/hide body checkbox
