@@ -1,10 +1,10 @@
 import * as THREE from "three";
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+// import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
+// import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 // import { TextGeometry} from "three";
 // import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
-import font_file from '../fonts/Bebas_Neue_Regular.json';
-import dro from 'three/examples/fonts/droid/droid_serif_regular.typeface.json';
+// import font_file from '../fonts/Bebas_Neue_Regular.json';
+// import dro from 'three/examples/fonts/droid/droid_serif_regular.typeface.json';
 import SceneInit from "./SceneInit";
 
 //pos is array of planet positions
@@ -160,8 +160,8 @@ export default class Planet {
           fog: true
         });
         var line = new THREE.Line(orbitLine, material);
-        console.log("font:" + Object.values(font_file));
-        console.log("dro" + Object.values(dro));
+        // console.log("font:" + Object.values(font_file));
+        // console.log("dro" + Object.values(dro));
         line.position.set(0,0,0);
         line.name = this.name + "_orbit";
         this.orbit = line;

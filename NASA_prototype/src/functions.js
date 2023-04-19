@@ -33,6 +33,23 @@ export function searchMissions(){
     }
 }
 
+// $(document).ready(function mission_data(mission, utc){
+//   $("#VOYAGER 1").on('click',function)
+//   $.ajax({
+//     url:'https://spice-api.herokuapp.com/mission?mission=' + mission + '&utc='+utc,
+//     type: 'GET',
+//     dataType:'JSON',
+//     crossDomain: true,
+//     success:function(data){
+//       alert(data);
+//     },
+//     error:function(xhr,status,error){
+//       var errorMessage = xhr.status + ':' + xhr.statusText
+//       alert('Error - ' + errorMessage);
+//     }
+//   })
+// })
+
 
 var coll = document.getElementsByClassName("collapsible");
 var i;

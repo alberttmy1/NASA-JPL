@@ -1,7 +1,7 @@
 import './style.css'
 //import * as THREE from "../node_modules/three/build/three.module.js"
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
 import SceneInit from "./lib/SceneInit";
 import Planet from "./lib/Planet";
@@ -142,25 +142,44 @@ function ajax_planets(){
   })
 }
 
-
-function mission_data(mission){
-  return new Promise((resolve,reject) => {
-    $.ajax({
-      url:'https://spice-api.herokuapp.com/mission?mission=' + mission,
-      type: 'GET',
-      dataType:'JSON',
-      crossDomain: true,
-      success:function(data){
-        resolve(data);
-      },
-      error:function(xhr,status,error){
-        var errorMessage = xhr.status + ':' + xhr.statusText
-        reject(data);
-        alert('Error - ' + errorMessage);
-      }
-    })
+function mission_data(mission, utc){
+  $.ajax({
+    url:'https://spice-api.herokuapp.com/mission?mission=' + mission + '&utc='+utc,
+    type: 'GET',
+    dataType:'JSON',
+    crossDomain: true,
+    success:function(data){
+      alert(data);
+    },
+    error:function(xhr,status,error){
+      var errorMessage = xhr.status + ':' + xhr.statusText
+      alert('Error - ' + errorMessage);
+    }
   })
 }
+window.mission_data = mission_data;
+
+
+
+
+// function mission_data(mission, utc){
+//   return new Promise((resolve,reject) => {
+//     $.ajax({
+//       url:'https://spice-api.herokuapp.com/mission?mission=' + mission + '&utc='+utc,
+//       type: 'GET',
+//       dataType:'JSON',
+//       crossDomain: true,
+//       success:function(data){
+//         resolve(data);
+//       },
+//       error:function(xhr,status,error){
+//         var errorMessage = xhr.status + ':' + xhr.statusText
+//         reject(data);
+//         alert('Error - ' + errorMessage);
+//       }
+//     })
+//   })
+// }
 
 //loads images
 const images = importAll(require.context('./assets', false, /\.(png|jpe?g|svg)$/));
@@ -298,7 +317,7 @@ function add_planet(name,time){
     })
 }
 
-console.log(mission_data("APOLLO"));
+//console.log(mission_data("APOLLO"));
 
 (async () => {
   var objects = [];
