@@ -1,7 +1,7 @@
 import './style.css'
 //import * as THREE from "../node_modules/three/build/three.module.js"
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
 import SceneInit from "./lib/SceneInit";
 import Planet from "./lib/Planet";
@@ -15,32 +15,6 @@ function importAll(r) {
   return images;
 }
 
-//test spice function
-function spice(target_, obs_, utctim_ ){
-    //console.log("spice function entered")
-    var newCoordinates = []; //new coordinates
-    $.ajax({
-      url:'https://spice-api.herokuapp.com/orbits',
-      type: 'GET',
-      dataType:'JSON',
-      METAKR:'getsa.tm',
-      target:'EARTH',
-      obs:'CASSINI',
-      utctim:'2004 jun 11 19:32:00',
-      success:function(data){
-        alert(data.x + " "+ data.y + " "+ data.z);
-        newCoordinates[0] = data.x;
-        newCoordinates[1] = data.y;
-        newCoordinates[2] = data.z;
-      },
-      error:function(xhr,status,error){
-        var errorMessage = xhr.status + ':' + xhr.statusText
-        alert('Error - ' + errorMessage);
-      }
-    }); 
-    return newCoordinates;
-}
-window.spice = spice;
 
 function uploadFile(form)
 {
@@ -88,16 +62,6 @@ function ajax_call(target,time){
   })
 }
 
-//takes data from ajax call and returns the coordinates
-function spice_orbit(data){
-    //console.log("spice orbit function entered")
-    var newCoordinates = new Array(); //new coordinates
-    newCoordinates = [data.x,data.y,data.z];
-    //console.log("Planet Coords",newCoordinates);
-    return newCoordinates;
-}
-window.spice_orbit = spice_orbit;
-
 //ajax call for all planet data
 function ajax_planets(){
   var bodlist;
@@ -120,25 +84,25 @@ function ajax_planets(){
   })
 }
 
-
-function mission_data(mission){
+function mission_ajax(mission, utc, len){
   return new Promise((resolve,reject) => {
     $.ajax({
-      url:'https://spice-api.herokuapp.com/mission?mission=' + mission,
+      url:'https://spice-api.herokuapp.com/mission_pos?mission=' + mission + '&utc='+utc+'&length='+len,
       type: 'GET',
       dataType:'JSON',
       crossDomain: true,
       success:function(data){
-        resolve(data);
+        resolve(data)
+        //alert(data.x + " "+ data.y + " "+ data.z);
       },
       error:function(xhr,status,error){
         var errorMessage = xhr.status + ':' + xhr.statusText
-        reject(data);
         alert('Error - ' + errorMessage);
       }
     })
   })
 }
+window.mission_data = mission_data;
 
 //loads images
 const images = importAll(require.context('./assets', false, /\.(png|jpe?g|svg)$/));
@@ -230,45 +194,27 @@ function add_planet(name,time){
   ajax_call(name,time)
   //if data received then adds planet
     .then((data) => {
-      //console.log(name);
-      var newCoordinates = spice_orbit(data)
       //used default radius need to add dynamically
       //creates new planet object
-      var planet = new Planet(7000, newCoordinates[0], newCoordinates[1], newCoordinates[2],name,test,time);
+      var planet = new Planet(data.r, data.x, data.y, data.z,name,test,time,false);
       planets.push(planet);
 
       // Listen for changes to the show/hide body checkbox
       var objBodyCheckbox = document.getElementById(name + '_body');
       objBodyCheckbox.addEventListener('change', function() {
-        if (!this.checked) {
-          test.scene.remove(planet.mesh);
-          test.scene.remove(planet.halo);
-        } else {
-          test.scene.add(planet.mesh);
-          test.scene.add(planet.halo);
-        }
+        planet.update('body');
       });
 
       // Listen for changes to the show/hide trajectory checkbox
       var objTrajCheckbox = document.getElementById(name + '_traj');
       objTrajCheckbox.addEventListener('change', function() {
-        if (!this.checked) {
-          test.scene.remove(planet.orbit);
-        } else {
-          test.scene.add(planet.orbit);
-        }
+          planet.update('trag');
       });
       
       // Listen for changes to the show/hide gradient checkbox
       var objGradCheckbox = document.getElementById(name + '_grad');
       objGradCheckbox.addEventListener('change', function() {
-        if (!this.checked) {
-          test.scene.remove(planet.orbit);
-          test.scene.add(planet.orbit_white);
-        } else {
-          test.scene.remove(planet.orbit_white);
-          test.scene.add(planet.orbit);
-        }
+          planet.update('grad');
       });
     })
     .catch((error) => {
@@ -276,7 +222,7 @@ function add_planet(name,time){
     })
 }
 
-console.log(mission_data("APOLLO"));
+//console.log(mission_data("APOLLO"));
 
 (async () => {
   var objects = [];
@@ -298,6 +244,15 @@ console.log(mission_data("APOLLO"));
   addButtons(objects, "object_library", "pinned_objects", planets);
 })();
 
+function mission_data(mission,utc,len){
+  let time = new Date().toISOString();
+  //let time = '2005-02-13T03:39:06.747Z';
+  mission_ajax(mission,time,len)
+    .then((data) =>{
+      console.log("yep",mission);
+      var planet = new Planet(5000, data.x, data.y, data.z,mission,test,time,true);
+    })
+}
 // get mission names from backend 
 var missions_back = [];
 

@@ -1,10 +1,10 @@
 import * as THREE from "three";
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+// import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
+// import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 // import { TextGeometry} from "three";
 // import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
-import font_file from '../fonts/Bebas_Neue_Regular.json';
-import dro from 'three/examples/fonts/droid/droid_serif_regular.typeface.json';
+// import font_file from '../fonts/Bebas_Neue_Regular.json';
+// import dro from 'three/examples/fonts/droid/droid_serif_regular.typeface.json';
 import SceneInit from "./SceneInit";
 
 //pos is array of planet positions
@@ -14,7 +14,7 @@ import SceneInit from "./SceneInit";
 //pos.unshift([x,y,z]) adds new planet position to front
 
 export default class Planet {
-  constructor(radius, positionX, positionY, positionZ, name, screen, date/*, textureFile*/) {
+  constructor(radius, positionX, positionY, positionZ, name, screen, date,isMission/*, textureFile*/) {
     this.screen = screen;
     this.date = date;
     this.radius = this.toAU(radius);
@@ -24,17 +24,15 @@ export default class Planet {
     this.pos = [];
     this.velocityVectors = [];
     this.velocities = [];
+    this.isMission = isMission;
     //not using textures currently
     //this.textureFile = textureFile;
     this.name = name;
     //orbit shit
     this.orbit = undefined;
-    this.orbit_white = undefined;
     this.halo = this.createHalo();
-    // this.createOrbit();
     // this.textName = this.displayName(name, this.toAU(positionX),this.toAU(positionY),this.toAU(positionZ));
     this.system = undefined;
-    this.createWhiteOrbit();
     this.createOrbit();
   }
 
@@ -72,6 +70,20 @@ export default class Planet {
       return(((m-rmin)/(rmax-rmin))*(tmax-tmin)+tmin)
   };
 
+  update(obj){
+    if(obj == 'grad'){
+      this.orbit.material.vertexColors = !this.orbit.material.vertexColors;
+      this.orbit.material.needsUpdate = true;
+    }
+    if(obj == 'trag') this.orbit.material.visible = !this.orbit.material.visible;
+    if(obj == 'body'){
+      this.halo.material.visible = !this.halo.material.visible;
+      this.system.children[0].visible = !this.system.children[0].visible;
+    }
+
+    
+  }
+
   getMesh() {
     if (this.mesh === undefined || this.mesh === null) {
       const geometry = new THREE.SphereGeometry(this.radius);
@@ -93,7 +105,7 @@ export default class Planet {
   ajax_call(target,time,len){
     return new Promise((resolve) => {
         $.ajax({
-          url:'https://spice-api.herokuapp.com/orbits?planet='+target+'&utc='+time+'&length='+len,
+          url:(!this.isMission) ? 'https://spice-api.herokuapp.com/orbits?planet='+target+'&utc='+time+'&length='+len : 'https://spice-api.herokuapp.com/mission_orbits?planet='+target+'&utc='+time+'&length='+len,
           type: 'GET',
           dataType:'JSON',
           crossDomain: true,
@@ -107,26 +119,6 @@ export default class Planet {
     })
   };
 
-  createWhiteOrbit(){
-    const orbitLine = new THREE.BufferGeometry();
-    orbitLine.setAttribute('position', new THREE.Float32BufferAttribute(this.pos.flat(), 3));
-    orbitLine.setAttribute('color', new THREE.Float32BufferAttribute(new Array(this.pos.length).fill(1), 3));
-    orbitLine.computeBoundingSphere();
-
-    //attributes of line
-    var material = new THREE.LineBasicMaterial({
-      color: "white",
-      vertexColors: true,
-      linewidth: 10,
-      fog: true
-    });
-
-    var line = new THREE.Line(orbitLine, material);
-    line.computeLineDistances();
-    line.position.set(0, 0, 0);
-
-    this.orbit_white = line;
-  }
 
   //not using orbits currently
   createOrbit() {
@@ -160,8 +152,8 @@ export default class Planet {
           fog: true
         });
         var line = new THREE.Line(orbitLine, material);
-        console.log("font:" + Object.values(font_file));
-        console.log("dro" + Object.values(dro));
+        // console.log("font:" + Object.values(font_file));
+        // console.log("dro" + Object.values(dro));
         line.position.set(0,0,0);
         line.name = this.name + "_orbit";
         this.orbit = line;
@@ -175,6 +167,7 @@ export default class Planet {
         // system.add(this.textName);
         this.screen.scene.add(system);
         //console.log("system:" + system);
+        this.system = system;
 
         return system;
       });
