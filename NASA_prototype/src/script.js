@@ -139,7 +139,7 @@ function mission_data(mission, utc){
     dataType:'JSON',
     crossDomain: true,
     success:function(data){
-      alert(data);
+      alert(data.x + " "+ data.y + " "+ data.z);
     },
     error:function(xhr,status,error){
       var errorMessage = xhr.status + ':' + xhr.statusText
