@@ -92,7 +92,7 @@ export function addButtons(objects, id, pinned, planets) {
   i = 0;
   objects.forEach(function(objects) {
     var button = document.createElement("button");
-    button.innerHTML = objects;
+    button.innerHTML = objects.replace(" BARYCENTER","");
     button.type = "button";
     button.classList.add("collapsible");
 
