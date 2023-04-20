@@ -73,9 +73,18 @@ export default class Planet {
       return(((m-rmin)/(rmax-rmin))*(tmax-tmin)+tmin)
   };
 
-  updateLine(){
-    this.orbit.material.vertexColors = !this.orbit.material.vertexColors;
-    this.orbit.material.needsUpdate = true;
+  update(obj){
+    if(obj == 'grad'){
+      this.orbit.material.vertexColors = !this.orbit.material.vertexColors;
+      this.orbit.material.needsUpdate = true;
+    }
+    if(obj == 'trag') this.orbit.material.visible = !this.orbit.material.visible;
+    if(obj == 'body'){
+      this.halo.material.visible = !this.halo.material.visible;
+      this.system.children[0].visible = !this.system.children[0].visible;
+    }
+
+    
   }
 
   getMesh() {
@@ -161,6 +170,7 @@ export default class Planet {
         // system.add(this.textName);
         this.screen.scene.add(system);
         //console.log("system:" + system);
+        this.system = system;
 
         return system;
       });
