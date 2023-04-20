@@ -15,54 +15,6 @@ function importAll(r) {
   return images;
 }
 
-//test spice function
-function spice(target_, obs_, utctim_ ){
-    //console.log("spice function entered")
-    var newCoordinates = []; //new coordinates
-    $.ajax({
-      url:'https://spice-api.herokuapp.com/orbits',
-      type: 'GET',
-      dataType:'JSON',
-      METAKR:'getsa.tm',
-      target:'EARTH',
-      obs:'CASSINI',
-      utctim:'2004 jun 11 19:32:00',
-      success:function(data){
-        alert(data.x + " "+ data.y + " "+ data.z);
-        newCoordinates[0] = data.x;
-        newCoordinates[1] = data.y;
-        newCoordinates[2] = data.z;
-      },
-      error:function(xhr,status,error){
-        var errorMessage = xhr.status + ':' + xhr.statusText
-        alert('Error - ' + errorMessage);
-      }
-    }); 
-    return newCoordinates;
-}
-window.spice = spice;
-
-function spice_form(query){
-  console.log("spice function entered")
-  var newCoordinates = []; //new coordinates
-  $.ajax({
-    url:'https://spice-api.herokuapp.com/orbits/'+query,
-    type: 'GET',
-    dataType:'JSON',
-    success:function(data){
-      alert(data.x + " "+ data.y + " "+ data.z);
-      newCoordinates[0] = data.x;
-      newCoordinates[1] = data.y;
-      newCoordinates[2] = data.z;
-    },
-    error:function(xhr,status,error){
-      var errorMessage = xhr.status + ':' + xhr.statusText
-      alert('Error - ' + errorMessage);
-    }
-  }); 
-  return newCoordinates;
-}
-window.spice = spice;
 
 function uploadFile(form)
 {
@@ -247,29 +199,19 @@ function add_planet(name,time){
       // Listen for changes to the show/hide body checkbox
       var objBodyCheckbox = document.getElementById(name + '_body');
       objBodyCheckbox.addEventListener('change', function() {
-        if (!this.checked) {
-          test.scene.remove(planet.mesh);
-          test.scene.remove(planet.halo);
-        } else {
-          test.scene.add(planet.mesh);
-          test.scene.add(planet.halo);
-        }
+        planet.update('body');
       });
 
       // Listen for changes to the show/hide trajectory checkbox
       var objTrajCheckbox = document.getElementById(name + '_traj');
       objTrajCheckbox.addEventListener('change', function() {
-        if (!this.checked) {
-          test.scene.remove(planet.orbit);
-        } else {
-          test.scene.add(planet.orbit);
-        }
+          planet.update('trag');
       });
       
       // Listen for changes to the show/hide trajectory checkbox
       var objGradCheckbox = document.getElementById(name + '_grad');
       objGradCheckbox.addEventListener('change', function() {
-          planet.updateLine();
+          planet.update('grad');
       });
     })
     .catch((error) => {
