@@ -84,19 +84,22 @@ function ajax_planets(){
   })
 }
 
-function mission_data(mission, utc){
-  $.ajax({
-    url:'https://spice-api.herokuapp.com/mission?mission=' + mission + '&utc='+utc,
-    type: 'GET',
-    dataType:'JSON',
-    crossDomain: true,
-    success:function(data){
-      alert(data.x + " "+ data.y + " "+ data.z);
-    },
-    error:function(xhr,status,error){
-      var errorMessage = xhr.status + ':' + xhr.statusText
-      alert('Error - ' + errorMessage);
-    }
+function mission_ajax(mission, utc, len){
+  return new Promise((resolve,reject) => {
+    $.ajax({
+      url:'https://spice-api.herokuapp.com/mission_pos?mission=' + mission + '&utc='+utc+'&length='+len,
+      type: 'GET',
+      dataType:'JSON',
+      crossDomain: true,
+      success:function(data){
+        resolve(data)
+        //alert(data.x + " "+ data.y + " "+ data.z);
+      },
+      error:function(xhr,status,error){
+        var errorMessage = xhr.status + ':' + xhr.statusText
+        alert('Error - ' + errorMessage);
+      }
+    })
   })
 }
 window.mission_data = mission_data;
@@ -193,7 +196,7 @@ function add_planet(name,time){
     .then((data) => {
       //used default radius need to add dynamically
       //creates new planet object
-      var planet = new Planet(data.r, data.x, data.y, data.z,name,test,time);
+      var planet = new Planet(data.r, data.x, data.y, data.z,name,test,time,false);
       planets.push(planet);
 
       // Listen for changes to the show/hide body checkbox
@@ -241,6 +244,15 @@ function add_planet(name,time){
   addButtons(objects, "object_library", "pinned_objects", planets);
 })();
 
+function mission_data(mission,utc,len){
+  let time = new Date().toISOString();
+  //let time = '2005-02-13T03:39:06.747Z';
+  mission_ajax(mission,time,len)
+    .then((data) =>{
+      console.log("yep",mission);
+      var planet = new Planet(5000, data.x, data.y, data.z,mission,test,time,true);
+    })
+}
 // get mission names from backend 
 var missions_back = [];
 

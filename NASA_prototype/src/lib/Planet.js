@@ -14,7 +14,7 @@ import SceneInit from "./SceneInit";
 //pos.unshift([x,y,z]) adds new planet position to front
 
 export default class Planet {
-  constructor(radius, positionX, positionY, positionZ, name, screen, date/*, textureFile*/) {
+  constructor(radius, positionX, positionY, positionZ, name, screen, date,isMission/*, textureFile*/) {
     this.screen = screen;
     this.date = date;
     this.radius = this.toAU(radius);
@@ -24,6 +24,7 @@ export default class Planet {
     this.pos = [];
     this.velocityVectors = [];
     this.velocities = [];
+    this.isMission = isMission;
     //not using textures currently
     //this.textureFile = textureFile;
     this.name = name;
@@ -104,7 +105,7 @@ export default class Planet {
   ajax_call(target,time,len){
     return new Promise((resolve) => {
         $.ajax({
-          url:'https://spice-api.herokuapp.com/orbits?planet='+target+'&utc='+time+'&length='+len,
+          url:(!this.isMission) ? 'https://spice-api.herokuapp.com/orbits?planet='+target+'&utc='+time+'&length='+len : 'https://spice-api.herokuapp.com/mission_orbits?planet='+target+'&utc='+time+'&length='+len,
           type: 'GET',
           dataType:'JSON',
           crossDomain: true,
