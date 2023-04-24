@@ -318,3 +318,4 @@ var missions = ["APOLLO", "BEPICOLOMBO", "CASSINI","CHANDRA",
 "THEMIS", "ULYSSES", "VEGA", "VEX", "VIKING", "VOYAGER"]; 
 
 addButtons(missions, "mission_library", "pinned_missions");
+

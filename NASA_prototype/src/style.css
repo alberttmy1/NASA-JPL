@@ -329,18 +329,31 @@ body {
 
 #scroll-bar {
   position: fixed;
-  top: 10%;
-  left: 83%;
-  width: 15%;
-  z-index: 1000;
-  background-color: #c7c7c7;
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  text-align: center;
 }
 
-.slider{
-  position: fixed;
-  top: 10%;
-  left: 83%;
-  width: 15%;
+.slider {
+  width: 80%;
+}
+
+.scroll-bar-labels {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.scroll-bar-labels .scroll-bar-label-left {
+  flex: 1;
+  text-align: left;
+}
+
+.scroll-bar-labels .scroll-bar-label-right {
+  flex: 1;
+  text-align: right;
 }
