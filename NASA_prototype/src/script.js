@@ -183,6 +183,20 @@ envBodyCheckbox.addEventListener('change', function() {
   }
 });
 
+var envGradCheckbox = document.getElementById('env_grad');
+envGradCheckbox.addEventListener('change', function() {
+  for(let i=0; i<planets.length; i++){
+    planets[i].update('grad');
+  }
+});
+
+var envTragCheckbox = document.getElementById('env_traj');
+envTragCheckbox.addEventListener('change', function() {
+  for(let i=0; i<planets.length; i++){
+    planets[i].update('trag');
+  }
+});
+
 //array of all planet objects
 const planets = [];
 //this date changes planets+orbits
