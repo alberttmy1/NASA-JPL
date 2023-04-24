@@ -121,52 +121,53 @@ test.animate();
 // Objects
 
 //SUN
-const sunGeometry = new THREE.SphereGeometry(0.00465047);
-//scaled up sun for visiblity
-//const sunGeometry = new THREE.SphereGeometry(0.265047);
-const sunTexture = new THREE.TextureLoader().load(images['sun.jpg'].default);
-const sunMaterial = new THREE.MeshBasicMaterial({map: sunTexture});
-//sun halo, uses code from planet class, can be cleaned up later
-var resolution = 15 * 50; // segments in the line
-var length = 360 / resolution;
-var orbitLine = new THREE.BufferGeometry();
-var material = new THREE.LineBasicMaterial({
-  color: 'gold',
-  linewidth: 1,
-  fog: true
-});
-// Build the orbit line
-const positions1 = [];
-const positions2 = [];
-for (var i = 0; i <= resolution; i++) {
-  var segment = (i * length) * Math.PI / 180;
-  var orbitAmplitude = 0.00465047 * 30;
+function add_sun(){
+  const sunGeometry = new THREE.SphereGeometry(0.00465047);
+  //scaled up sun for visiblity
+  //const sunGeometry = new THREE.SphereGeometry(0.265047);
+  const sunTexture = new THREE.TextureLoader().load(images['sun.jpg'].default);
+  const sunMaterial = new THREE.MeshBasicMaterial({map: sunTexture});
+  //sun halo, uses code from planet class, can be cleaned up later
+  var resolution = 15 * 50; // segments in the line
+  var length = 360 / resolution;
+  var orbitLine = new THREE.BufferGeometry();
+  var material = new THREE.LineBasicMaterial({
+    color: 'gold',
+    linewidth: 1,
+    fog: true
+  });
+  // Build the orbit line
+  const positions1 = [];
+  const positions2 = [];
+  for (var i = 0; i <= resolution; i++) {
+    var segment = (i * length) * Math.PI / 180;
+    var orbitAmplitude = 0.00465047 * 30;
 
-  positions1.push(
+    positions1.push(
+        Math.cos(segment) * orbitAmplitude,
+        0,
+        Math.sin(segment) * orbitAmplitude
+    );
+    positions2.push(
       Math.cos(segment) * orbitAmplitude,
-      0,
-      Math.sin(segment) * orbitAmplitude
-  );
-  positions2.push(
-    Math.cos(segment) * orbitAmplitude,
-    Math.sin(segment) * orbitAmplitude,
-    0
-  );
+      Math.sin(segment) * orbitAmplitude,
+      0
+    );
+  }
+  const positions = positions1.concat(positions2);
+
+  orbitLine.setAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
+  //orbitLine.computeBoundingSphere();
+  var sunHalo = new THREE.Line(orbitLine, material);
+  sunHalo.position.set(0, 0, 0);
+
+  // Mesh
+  const sunMesh = new THREE.Mesh(sunGeometry,sunMaterial);
+  const solarSystem = new THREE.Group();
+  solarSystem.add(sunMesh);
+  solarSystem.add(sunHalo);
+  test.scene.add(solarSystem);
 }
-const positions = positions1.concat(positions2);
-
-orbitLine.setAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
-//orbitLine.computeBoundingSphere();
-var sunHalo = new THREE.Line(orbitLine, material);
-sunHalo.position.set(0, 0, 0);
-
-// Mesh
-const sunMesh = new THREE.Mesh(sunGeometry,sunMaterial);
-const solarSystem = new THREE.Group();
-solarSystem.add(sunMesh);
-solarSystem.add(sunHalo);
-test.scene.add(solarSystem);
-
 const starTexture = new THREE.TextureLoader().load(images['galaxy.jpg'].default);
 test.scene.background = starTexture;
 
@@ -183,20 +184,48 @@ envBodyCheckbox.addEventListener('change', function() {
   }
 });
 
-//array of all planet objects
-const planets = [];
-//this date changes planets+orbits
-let date =new Date().toISOString();
-//let date = '2020-04-13T03:39:06.747Z';
+var envGradCheckbox = document.getElementById('env_grad');
+envGradCheckbox.addEventListener('change', function() {
+  for(let i=0; i<planets.length; i++){
+    planets[i].update('grad');
+  }
+});
+
+var envTragCheckbox = document.getElementById('env_traj');
+envTragCheckbox.addEventListener('change', function() {
+  for(let i=0; i<planets.length; i++){
+    planets[i].update('trag');
+  }
+});
+
+const slider = document.getElementById("myRange");
+slider.oninput = function(){
+  for(let i=0; i<planets.length; i++){
+    planets[i].system.children[0].position.x = planets[i].pos[this.value][0];
+    planets[i].system.children[0].position.y = planets[i].pos[this.value][1];
+    planets[i].system.children[0].position.z = planets[i].pos[this.value][2];
+    planets[i].system.children[2].position.x = planets[i].pos[this.value][0];
+    planets[i].system.children[2].position.y = planets[i].pos[this.value][1];
+    planets[i].system.children[2].position.z = planets[i].pos[this.value][2];
+  } 
+}
+
+
+function update_slider(min,max){
+  slider.min = min;
+  slider.max = max;
+  slider.value = min;
+}
+
 //planets
-function add_planet(name,time){
+function add_planet(name,time,len){
   //makes ajax call with planet name
   ajax_call(name,time)
   //if data received then adds planet
     .then((data) => {
       //used default radius need to add dynamically
       //creates new planet object
-      var planet = new Planet(data.r, data.x, data.y, data.z,name,test,time,false);
+      var planet = new Planet(data.r, data.x, data.y, data.z,name,test,time,false,len);
       planets.push(planet);
 
       // Listen for changes to the show/hide body checkbox
@@ -222,37 +251,61 @@ function add_planet(name,time){
     })
 }
 
-//console.log(mission_data("APOLLO"));
-
-(async () => {
-  var objects = [];
-  var temp = await(ajax_planets());
-  //console.log(temp);
-  // gets rid of baycenter
-  for(let i = 0; i < temp.length; i++) {
-      if(temp[i].search("BARYCENTER") >= 0 && temp[i] != "SUN"){
-          objects.push(temp[i]);
+//loads in planets
+function load_system(start,len){
+  add_sun();
+  console.log(planets.length);
+  (async () => {
+    var objects = [];
+    var temp = await(ajax_planets());
+    //console.log(temp);
+    // gets rid of baycenter
+    for(let i = 0; i < temp.length; i++) {
+        if(temp[i].search("BARYCENTER") >= 0 && temp[i] != "SUN"){
+            objects.push(temp[i]);
+        }
       }
+
+    //add planets 
+    for(let x = 0; x < objects.length; x++){
+      console.log(len);
+      add_planet(objects[x],start,len);
     }
 
-  //add planets 
-  for(let x = 0; x < objects.length; x++){
-    add_planet(objects[x],date);
+    // call function to add buttons to collapsible
+    addButtons(objects, "object_library", "pinned_objects", planets);
+  })();
+}
+//removes planets
+function clean_system(){
+  test.scene.remove.apply(test.scene, test.scene.children);
+  while(planets.length > 0){
+    planets.pop();
   }
+}
 
-  // call function to add buttons to collapsible
-  addButtons(objects, "object_library", "pinned_objects", planets);
-})();
-
+//loads in new mission
 function mission_data(mission,utc,len){
   let time = new Date().toISOString();
   //let time = '2005-02-13T03:39:06.747Z';
-  mission_ajax(mission,time,len)
+  mission_ajax(mission,utc,len)
     .then((data) =>{
       console.log("yep",mission);
-      var planet = new Planet(5000, data.x, data.y, data.z,mission,test,time,true);
+      var planet = new Planet(5000, data.x, data.y, data.z,mission,test,utc,true,len);
+      clean_system();
+      load_system(utc,len);
+      update_slider(0,len);
     })
 }
+
+
+update_slider(0,10000);
+//array of all planet objects
+const planets = [];
+//this date changes planets+orbits
+let date =new Date().toISOString();
+//let date = '2020-04-13T03:39:06.747Z';
+load_system(date,10000);
 // get mission names from backend 
 var missions_back = [];
 

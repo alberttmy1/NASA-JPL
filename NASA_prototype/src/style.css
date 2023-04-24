@@ -327,3 +327,20 @@ body {
   /* Additional styles for expandable sections */
 }
 
+#scroll-bar {
+  position: fixed;
+  top: 10%;
+  left: 83%;
+  width: 15%;
+  z-index: 1000;
+  background-color: #c7c7c7;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.slider{
+  position: fixed;
+  top: 10%;
+  left: 83%;
+  width: 15%;
+}

@@ -14,7 +14,7 @@ import SceneInit from "./SceneInit";
 //pos.unshift([x,y,z]) adds new planet position to front
 
 export default class Planet {
-  constructor(radius, positionX, positionY, positionZ, name, screen, date,isMission/*, textureFile*/) {
+  constructor(radius, positionX, positionY, positionZ, name, screen, date,isMission,length/*, textureFile*/) {
     this.screen = screen;
     this.date = date;
     this.radius = this.toAU(radius);
@@ -25,6 +25,7 @@ export default class Planet {
     this.velocityVectors = [];
     this.velocities = [];
     this.isMission = isMission;
+    this.length = length;
     //not using textures currently
     //this.textureFile = textureFile;
     this.name = name;
@@ -42,10 +43,14 @@ export default class Planet {
   
   getColors(velocities){
     let colors = [];
+    let max = Math.max(...velocities);
+    let min = Math.min(...velocities);
     //assigns colors to velocites
     for(let i=0; i<velocities.length;i++){
       //first two numbers can be changed for scale of velocities
-        let scaled = this.scale(0.00000005,0.0000001,0,1020,velocities[i]);
+        //let scaled = this.scale(0.00000005,0.0000001,0,1020,velocities[i]);
+        let scaled = this.scale(min,max,0,1020,velocities[i]);
+
         //scales from 0-1
         let update = this.scale(0,255,0,1,(scaled%255));
         let color = [0,0,0]
@@ -124,11 +129,10 @@ export default class Planet {
   createOrbit() {
     //ajax call for orbit info
     //this is how many days long the orbit is
-    let orbitlength = 10000;
+    let orbitlength = this.length;
     this.ajax_call(this.name,this.date,orbitlength)
       .then((data) => {
         //adds all positions and velocity vectors to arrays
-        
         for(let i=0; i<data.length; i++){
           this.pos.push([this.toAU(data[i][0]),this.toAU(data[i][1]),this.toAU(data[i][2])]);
           this.velocityVectors.push([this.toAU(data[i][3]),this.toAU(data[i][4]),this.toAU(data[i][5])]);
@@ -146,8 +150,8 @@ export default class Planet {
         orbitLine.computeBoundingSphere();
         //attributes of line
         var material = new THREE.LineBasicMaterial({
-          //color: 'darkred',
-          vertexColors: true,
+          color:(!this.isMission) ? 'grey': 'white',
+          vertexColors:(!this.isMission) ? false: true,
           linewidth: 5,
           fog: true
         });
