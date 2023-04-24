@@ -150,8 +150,8 @@ export default class Planet {
         orbitLine.computeBoundingSphere();
         //attributes of line
         var material = new THREE.LineBasicMaterial({
-          //color: 'darkred',
-          vertexColors: true,
+          color:(!this.isMission) ? 'grey': 'white',
+          vertexColors:(!this.isMission) ? false: true,
           linewidth: 5,
           fog: true
         });
