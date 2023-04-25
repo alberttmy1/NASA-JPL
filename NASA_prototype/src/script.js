@@ -200,13 +200,14 @@ envTragCheckbox.addEventListener('change', function() {
 
 const slider = document.getElementById("myRange");
 slider.oninput = function(){
+  let ind = planets[0].pos.length - this.value - 1;
   for(let i=0; i<planets.length; i++){
-    planets[i].system.children[0].position.x = planets[i].pos[this.value][0];
-    planets[i].system.children[0].position.y = planets[i].pos[this.value][1];
-    planets[i].system.children[0].position.z = planets[i].pos[this.value][2];
-    planets[i].system.children[2].position.x = planets[i].pos[this.value][0];
-    planets[i].system.children[2].position.y = planets[i].pos[this.value][1];
-    planets[i].system.children[2].position.z = planets[i].pos[this.value][2];
+    planets[i].system.children[0].position.x = planets[i].pos[ind][0];
+    planets[i].system.children[0].position.y = planets[i].pos[ind][1];
+    planets[i].system.children[0].position.z = planets[i].pos[ind][2];
+    planets[i].system.children[2].position.x = planets[i].pos[ind][0];
+    planets[i].system.children[2].position.y = planets[i].pos[ind][1];
+    planets[i].system.children[2].position.z = planets[i].pos[ind][2];
   } 
 }
 
@@ -214,7 +215,7 @@ slider.oninput = function(){
 function update_slider(min,max){
   slider.min = min;
   slider.max = max;
-  slider.value = min;
+  slider.value = max;
 }
 
 //planets
