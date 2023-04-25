@@ -357,3 +357,8 @@ body {
   flex: 1;
   text-align: right;
 }
+
+.scroll-bar-labels .scroll-bar-label-middle {
+  flex: 1;
+  text-align: center;
+}

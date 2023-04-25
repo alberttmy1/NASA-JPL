@@ -201,6 +201,10 @@ envTragCheckbox.addEventListener('change', function() {
 const slider = document.getElementById("myRange");
 slider.oninput = function(){
   let ind = planets[0].pos.length - this.value - 1;
+  let temp = new Date(currentDate.getTime());
+  temp.setDate(temp.getDate()-(ind));
+  let middleLabel = document.getElementById("middleScroll");
+  middleLabel.innerHTML = temp.toUTCString();
   for(let i=0; i<planets.length; i++){
     planets[i].system.children[0].position.x = planets[i].pos[ind][0];
     planets[i].system.children[0].position.y = planets[i].pos[ind][1];
@@ -212,10 +216,19 @@ slider.oninput = function(){
 }
 
 
-function update_slider(min,max){
+function update_slider(min,max,date){
+  //updates slider to new dates
+  let temp = new Date(date.getTime());
+  temp.setDate(temp.getDate()-(max-min));
   slider.min = min;
   slider.max = max;
   slider.value = max;
+  let leftLabel = document.getElementById("leftScroll");
+  leftLabel.innerHTML = temp.toUTCString();
+  let rightLabel = document.getElementById("rightScroll");
+  rightLabel.innerHTML = date.toUTCString();
+  let middleLabel = document.getElementById("middleScroll");
+  middleLabel.innerHTML = date.toUTCString();
 }
 
 //planets
@@ -255,7 +268,6 @@ function add_planet(name,time,len){
 //loads in planets
 function load_system(start,len){
   add_sun();
-  console.log(planets.length);
   (async () => {
     var objects = [];
     var temp = await(ajax_planets());
@@ -269,7 +281,6 @@ function load_system(start,len){
 
     //add planets 
     for(let x = 0; x < objects.length; x++){
-      console.log(len);
       add_planet(objects[x],start,len);
     }
 
@@ -287,26 +298,27 @@ function clean_system(){
 
 //loads in new mission
 function mission_data(mission,utc,len){
-  let time = new Date().toISOString();
-  //let time = '2005-02-13T03:39:06.747Z';
+  currentDate = new Date(utc);
+
   mission_ajax(mission,utc,len)
     .then((data) =>{
       console.log("yep",mission);
       var planet = new Planet(5000, data.x, data.y, data.z,mission,test,utc,true,len);
       clean_system();
       load_system(utc,len);
-      update_slider(0,len);
+      update_slider(0,len,new Date(utc));
     })
 }
 
 
-update_slider(0,10000);
 //array of all planet objects
 const planets = [];
 //this date changes planets+orbits
-let date =new Date().toISOString();
+let date =new Date();
+var currentDate = date;
 //let date = '2020-04-13T03:39:06.747Z';
-load_system(date,10000);
+update_slider(0,10000,date);
+load_system(date.toISOString(),10000);
 // get mission names from backend 
 var missions_back = [];
 
