@@ -8,13 +8,14 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass';
 
 export default class SceneInit {
-  constructor(fov = 5, camera, scene, stats, controls, renderer) {
+  constructor(fov = 5, camera, scene, stats, controls, renderer, raycaster) {
     this.fov = fov;
     this.scene = scene;
     this.stats = stats;
     this.camera = camera;
     this.controls = controls;
     this.renderer = renderer;
+    this.raycaster = raycaster;
   }
 
   initScene() {
@@ -47,6 +48,33 @@ export default class SceneInit {
 
     // if window resizes
     window.addEventListener("resize", () => this.onWindowResize(), false);
+
+    // raycaster 
+    // Raycaster 
+    // create a raycaster to detect when the mouse is hovering over a planet
+    this.raycaster = new THREE.Raycaster();
+
+    // add a mouse move event listener to the renderer
+    this.renderer.domElement.addEventListener('mousemove', event => {
+      // calculate the mouse position in normalized device coordinates (-1 to +1)
+      const mouse = new THREE.Vector2();
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      
+      // set the raycaster origin and direction based on the mouse position
+      this.raycaster.setFromCamera(mouse, this.camera);
+      
+      // detect all intersections between the raycaster and the planets
+      const intersects = this.raycaster.intersectObjects(planets);
+      
+      if (intersects.length > 0) {
+        // call the onHover function of the first intersected planet
+        intersects[0].object.userData.onHover();
+      } else {
+        // hide the tooltip if the mouse is not hovering over a planet
+        tooltip.style.visibility = 'hidden';
+      }
+    });
   }
 
   animate() {
