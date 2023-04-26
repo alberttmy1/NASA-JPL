@@ -15,6 +15,7 @@ import SceneInit from "./SceneInit";
 
 export default class Planet {
   constructor(radius, positionX, positionY, positionZ, name, screen, date,isMission,length/*, textureFile*/) {
+    // screen.scene 
     this.screen = screen;
     this.date = date;
     this.radius = this.toAU(radius);
@@ -218,95 +219,27 @@ export default class Planet {
   
   //will be used to display planet name near planet
   displayName(name, x, y,z){
-    // const data = require('./fonts/Vogue_Regular.json');
-    // const fonts = fontAll(require.context('./font', false, /\.(json)$/));
-    //"../fonts/Vogue_Regular.json"
-    // ../fonts/Bebas_Neue_Regular.json'
-    // node_modules/three/examples/fonts/droid/droid_serif_regular.typeface.json
-
-
-    // Create a canvas element
-    var canvas = document.createElement('canvas');
-    var context = canvas.getContext('2d');
-
-    // Set canvas size
-    canvas.width = 6;
-    canvas.height = 10;
-
-    // Set text properties
-    context.font = '5px Arial';
-    context.fillStyle = 'white';
-    
-
-    // Draw text on canvas
-    context.fillText(name, canvas.width / 2, canvas.height / 2);
-
-    // Create a texture from the canvas
-    var texture = new THREE.CanvasTexture(canvas);
-
-    // Create a plane geometry to display the text
-    var geometry = new THREE.PlaneGeometry(6, 2);
-    var material = new THREE.MeshBasicMaterial({ map: texture });
-    var mesh = new THREE.Mesh(geometry, material);
-    
-    mesh.position.set(x, y, z);
-
-    // Add the mesh to the scene
-    return mesh;
-    
-    // const canvas = document.createElement('canvas');
-    // const context = canvas.getContext('2d');
-    // context.fillStyle = 'green';
-    // context.font = 'italic 5px Arial';
-    // // context.textAlign = 'center';
-    // context. textBaseline = 'middle';
-    // context.fillText(name, 0, 10);
-    // const texture = new THREE.Texture(canvas);
-    
-    // texture.needsUpdate = true;
-    // var material = new THREE.MeshBasicMaterial({
-    //   map: texture,
-    //   side: THREE.DoubleSide,
-    // })
-    // material.transparent = true
-    // var mesh = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), material)
-    // mesh.position.set(x, y, z);
-    // return mesh
-
-    // var fontLoader = new FontLoader();
-    // console.log("name");
-    // // console.log("../fonts/Bebas_Neue_Regular.json");
-    // fontLoader.load("three/examples/fonts/droid/droid_serif_regular.typeface.json", (font) => {
-    // // Create a TextGeometry using the loaded font
-    //   console.log("name");
-    //   const text = new TextGeometry(name, {
-    //     font: font,
-    //     size: 1,
-    //     height: 0.1,
-    //     });
-    //     const textMaterial = new THREE.MeshNormalMaterial();
-    //     const textMesh = new THREE.Mesh(text, textMaterial);
-    //     textMesh.position.x = -46;
-    //     textMesh.position.y = -10;
-    //     return textMesh;
-    // });
-
-    // const ttfLoader = new TTFLoader();
-    // ttfLoader.load("../fonts/jet_brains_mono_regular.ttf", (json) => {
-    //   // First parse the font.
-    //   const jetBrainsFont = fontLoader.parse(json);
-    //   // Use parsed font as normal.
-    //   const textGeometry = new TextGeometry(name, {
-    //     height: 2,
-    //     size: 10,
-    //     font: jetBrainsFont,
-    //   });
-    //   const textMaterial = new THREE.MeshNormalMaterial();
-    //   const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-    //   textMesh.position.x = -46;
-    //   textMesh.position.y = -10;
-    //   return textMesh;
-    // });
+    // add a mouse move event listener to the renderer
+    this.screen.scene.renderer.domElement.addEventListener('mousemove', event => {
+      // calculate the mouse position in normalized device coordinates (-1 to +1)
+      const mouse = new THREE.Vector2();
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      
+      // set the raycaster origin and direction based on the mouse position
+      this.raycaster.setFromCamera(mouse, this.camera);
+      
+      // detect all intersections between the raycaster and the planets
+      const intersects = this.raycaster.intersectObjects(self);
+      
+      if (intersects.length > 0) {
+        // call the onHover function of the first intersected planet
+        intersects[0].object.userData.onHover();
+      } else {
+        // hide the tooltip if the mouse is not hovering over a planet
+        tooltip.style.visibility = 'hidden';
+      }
+    });
   }
 
 }

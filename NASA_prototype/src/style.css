@@ -362,3 +362,23 @@ body {
   flex: 1;
   text-align: center;
 }
+
+canvas {
+  cursor: grab;
+  display: block;
+}
+
+canvas:active {
+  cursor: grabbing;
+}
+
+.hovered {
+  cursor: help;
+}
+
+.label {
+  color: #fff;
+  font-family: sans-serif;
+  padding: 2px;
+  background: rgba(0, 0, 0, 0.6);
+}

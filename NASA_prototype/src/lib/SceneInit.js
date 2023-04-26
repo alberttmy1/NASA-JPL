@@ -7,8 +7,15 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass';
 
+import {
+  CSS2DRenderer,
+  CSS2DObject,
+} from 'https://unpkg.com/three@0.125.2/examples/jsm/renderers/CSS2DRenderer.js';
+
+
 export default class SceneInit {
-  constructor(fov = 5, camera, scene, stats, controls, renderer, raycaster) {
+
+  constructor(fov = 5, camera, scene, stats, controls, renderer, raycaster, mouse, label, labelDiv, labelRenderer) {
     this.fov = fov;
     this.scene = scene;
     this.stats = stats;
@@ -16,6 +23,10 @@ export default class SceneInit {
     this.controls = controls;
     this.renderer = renderer;
     this.raycaster = raycaster;
+    this.mouse = mouse;
+    this.label = label;
+    this.labelDiv = labelDiv;
+    this.labelRenderer = labelRenderer;
   }
 
   initScene() {
@@ -42,6 +53,7 @@ export default class SceneInit {
     document.body.appendChild(this.renderer.domElement);
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls.enableDamping = true;
 
     this.stats = Stats();
     //document.body.appendChild(this.stats.dom);
@@ -50,44 +62,57 @@ export default class SceneInit {
     window.addEventListener("resize", () => this.onWindowResize(), false);
 
     // raycaster 
-    // Raycaster 
-    // create a raycaster to detect when the mouse is hovering over a planet
     this.raycaster = new THREE.Raycaster();
+    this.mouse = new Vector2();
 
-    // add a mouse move event listener to the renderer
-    this.renderer.domElement.addEventListener('mousemove', event => {
-      // calculate the mouse position in normalized device coordinates (-1 to +1)
-      const mouse = new THREE.Vector2();
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-      
-      // set the raycaster origin and direction based on the mouse position
-      this.raycaster.setFromCamera(mouse, this.camera);
-      
-      // detect all intersections between the raycaster and the planets
-      const intersects = this.raycaster.intersectObjects(planets);
-      
-      if (intersects.length > 0) {
-        // call the onHover function of the first intersected planet
-        intersects[0].object.userData.onHover();
-      } else {
-        // hide the tooltip if the mouse is not hovering over a planet
-        tooltip.style.visibility = 'hidden';
-      }
+    // Setup labels
+    this.labelRenderer = new CSS2DRenderer();
+    this.labelRenderer.setSize(innerWidth, innerHeight);
+    this.labelRenderer.domElement.style.position = 'absolute';
+    this.labelRenderer.domElement.style.top = '0px';
+    this.labelRenderer.domElement.style.pointerEvents = 'none';
+    document.body.appendChild(this.labelRenderer.domElement);
+
+    this.labelDiv = document.createElement('div');
+    this.labelDiv.className = 'label';
+    this.labelDiv.style.marginTop = '-1em';
+    this.label = new CSS2DObject(this.labelDiv);
+    this.label.visible = false;
+    this.scene.add(this.label);
+
+    window.addEventListener('mousemove', ({ clientX, clientY }) => {
+      const { innerWidth, innerHeight } = window;
+  
+      this.mouse.x = (clientX / innerWidth) * 2 - 1;
+      this.mouse.y = -(clientY / innerHeight) * 2 + 1;
     });
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      const { innerWidth, innerHeight } = window;
+
+      this.renderer.setSize(innerWidth, innerHeight);
+      this.camera.aspect = innerWidth / innerHeight;
+      this.camera.updateProjectionMatrix();
+    });
+
   }
 
   animate() {
     // requestAnimationFrame(this.animate.bind(this));
     window.requestAnimationFrame(this.animate.bind(this));
     this.render();
+    this.controls.update();
     this.stats.update();
+    update_mouse_over();
     // this.controls.update();
   }
 
   render() {
     //composer.render(this.scene, this.camera);
     this.renderer.render(this.scene, this.camera);
+    // Render labels
+    this.labelRenderer.render(this.scene, this.camera);
     //console.log("rendered");
   }
 
@@ -96,4 +121,37 @@ export default class SceneInit {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
+
+  
+  update_mouse_over() {
+    
+    // Pick objects from view using normalized mouse coordinates
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+
+    const [hovered] = this.raycaster.intersectObjects(this.scene.children);
+
+    if (hovered) {
+      // Setup label
+      this.renderer.domElement.className = 'hovered';
+      this.label.visible = true;
+      this.labelDiv.textContent = hovered.object.name;
+
+      // Get offset from object's dimensions
+      const offset = new Vector3();
+      new Box3().setFromObject(hovered.object).getSize(offset);
+
+      // Move label over hovered element
+      this.label.position.set(
+        hovered.object.position.x,
+        offset.y / 2,
+        hovered.object.position.z
+      );
+    } else {
+      // Reset label
+      this.renderer.domElement.className = '';
+      this.label.visible = false;
+      this.labelDiv.textContent = '';
+    }
+  }
+    
 }
