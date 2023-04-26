@@ -33,6 +33,23 @@ export function searchMissions(){
     }
 }
 
+// $(document).ready(function mission_data(mission, utc){
+//   $("#VOYAGER 1").on('click',function)
+//   $.ajax({
+//     url:'https://spice-api.herokuapp.com/mission?mission=' + mission + '&utc='+utc,
+//     type: 'GET',
+//     dataType:'JSON',
+//     crossDomain: true,
+//     success:function(data){
+//       alert(data);
+//     },
+//     error:function(xhr,status,error){
+//       var errorMessage = xhr.status + ':' + xhr.statusText
+//       alert('Error - ' + errorMessage);
+//     }
+//   })
+// })
+
 
 var coll = document.getElementsByClassName("collapsible");
 var i;
@@ -70,11 +87,12 @@ export function uploadFile(form)
  }
 
 // function to add buttons to collapsible
-export function addButtons(objects, id, pinned) {
+export function addButtons(objects, id, pinned, planets) {
   var buttonsContainer = document.getElementById(id);
+  i = 0;
   objects.forEach(function(objects) {
     var button = document.createElement("button");
-    button.innerHTML = objects;
+    button.innerHTML = objects.replace(" BARYCENTER","");
     button.type = "button";
     button.classList.add("collapsible");
 
@@ -123,7 +141,7 @@ export function addButtons(objects, id, pinned) {
     // BODY
     var checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.id = "env_body";
+    checkbox.id = objects + "_body";
     checkbox.value = "Body";
     checkbox.name = "showBody";
     checkbox.checked = true;
@@ -137,7 +155,7 @@ export function addButtons(objects, id, pinned) {
     // TRAJECTORY
     var checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.id = "env_traj";
+    checkbox.id = objects + "_traj";
     checkbox.value = "Trajectory";
     checkbox.name = "showTraj";
     checkbox.checked = true;
@@ -151,7 +169,7 @@ export function addButtons(objects, id, pinned) {
     // SPEED GRADIENT
     var checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.id = "env_grad";
+    checkbox.id = objects + "_grad";
     checkbox.value = "Gradient";
     checkbox.name = "showGrab";
     checkbox.checked = true;
@@ -176,5 +194,7 @@ export function addButtons(objects, id, pinned) {
         content.style.display = "block";
       }
     });
+
+    i += 1;
   });
 }
