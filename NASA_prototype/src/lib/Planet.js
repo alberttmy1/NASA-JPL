@@ -185,7 +185,7 @@ export default class Planet {
     var length = 360 / resolution;
     var orbitLine = new THREE.BufferGeometry();
     var material = new THREE.LineBasicMaterial({
-      color: 'lightblue',
+      color:(!this.isMission) ? 'lightblue': 'red',
       linewidth: 1,
       fog: true
     });
