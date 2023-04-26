@@ -303,9 +303,10 @@ function mission_data(mission,utc,len){
   mission_ajax(mission,utc,len)
     .then((data) =>{
       console.log("yep",mission);
-      var planet = new Planet(5000, data.x, data.y, data.z,mission,test,utc,true,len);
+      var planet = new Planet(20000, data.x, data.y, data.z,mission,test,utc,true,len);
       clean_system();
       load_system(utc,len);
+      planets.push(planet);
       update_slider(0,len,new Date(utc));
     })
 }
