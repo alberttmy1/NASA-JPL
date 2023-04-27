@@ -174,7 +174,7 @@ export default class Planet {
 
         // add planet label
         this.planetLabel = new CSS2DObject(document.createElement('div'));
-        this.planetLabel.element.textContent = this.name;
+        this.planetLabel.element.textContent = this.name.split(' ')[0];
         this.planetLabel.element.style.color = 'white';
         this.planetLabel.name = 'planetLabel';
         this.planetLabel.position.set(planetMesh.position.x, planetMesh.position.y, planetMesh.position.z);
