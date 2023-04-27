@@ -260,24 +260,10 @@ function add_planet(name,time,len){
           planet.update('grad');
       });
 
-      // Add planet on hover listener 
-      planet.userData.onHover = () => {
-        // set the tooltip content to the planet name
-        tooltip.innerHTML = planet.name;
-        
-        // position the tooltip relative to the mouse cursor
-        tooltip.style.left = event.clientX + 'px';
-        tooltip.style.top = event.clientY + 'px';
-        tooltip.style.visibility = 'visible';
-        
-        // adjust the tooltip position to prevent it from going off-screen
-        const tooltipRect = tooltip.getBoundingClientRect();
-        const bodyRect = document.body.getBoundingClientRect();
-        const left = Math.min(Math.max(0, event.pageX - tooltipRect.width / 2), bodyRect.width - tooltipRect.width);
-        const top = Math.min(Math.max(0, event.pageY - tooltipRect.height - 10), bodyRect.height - tooltipRect.height);
-        tooltip.style.left = left + 'px';
-        tooltip.style.top = top + 'px';
-      };
+      var planetNamesCheckbox = document.getElementById('planet_names');
+      planetNamesCheckbox.addEventListener('change', function() {
+        planet.planetLabel.visible = planetNamesCheckbox.checked;
+      });
 
     })
     .catch((error) => {
