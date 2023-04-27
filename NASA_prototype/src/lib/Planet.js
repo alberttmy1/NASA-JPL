@@ -6,6 +6,7 @@ import * as THREE from "three";
 // import font_file from '../fonts/Bebas_Neue_Regular.json';
 // import dro from 'three/examples/fonts/droid/droid_serif_regular.typeface.json';
 import SceneInit from "./SceneInit";
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
 //pos is array of planet positions
 //check if pos[0] is equal to current days planet position
@@ -14,7 +15,7 @@ import SceneInit from "./SceneInit";
 //pos.unshift([x,y,z]) adds new planet position to front
 
 export default class Planet {
-  constructor(radius, positionX, positionY, positionZ, name, screen, date,isMission,length/*, textureFile*/) {
+  constructor(radius, positionX, positionY, positionZ, name, screen, date,isMission,length, planetLabel/*, textureFile*/) {
     // screen.scene 
     this.screen = screen;
     this.date = date;
@@ -36,6 +37,7 @@ export default class Planet {
     // this.textName = this.displayName(name, this.toAU(positionX),this.toAU(positionY),this.toAU(positionZ));
     this.system = undefined;
     this.createOrbit();
+    this.planetLabel = planetLabel;
   }
 
   toAU(km){
@@ -169,9 +171,21 @@ export default class Planet {
         system.add(planetMesh);
         system.add(this.orbit);
         system.add(this.halo);
-        // system.add(this.textName);
+
+        // add planet label
+        this.planetLabel = new CSS2DObject(document.createElement('div'));
+        this.planetLabel.element.textContent = this.name;
+        this.planetLabel.element.style.color = 'white';
+        this.planetLabel.name = 'planetLabel';
+        this.planetLabel.position.set(planetMesh.position.x, planetMesh.position.y, planetMesh.position.z);
+        //this.planetLabel.position.set(0, 0, 0);
+        this.screen.scene.add(this.planetLabel);
+
+        system.add(this.planetLabel);
+
+        system.name = this.name;
+
         this.screen.scene.add(system);
-        //console.log("system:" + system);
         this.system = system;
 
         return system;
@@ -216,30 +230,4 @@ export default class Planet {
     line.position.set(this.xPos, this.yPos, this.zPos);
     return line;
   }
-  
-  //will be used to display planet name near planet
-  displayName(name, x, y,z){
-    // add a mouse move event listener to the renderer
-    this.screen.scene.renderer.domElement.addEventListener('mousemove', event => {
-      // calculate the mouse position in normalized device coordinates (-1 to +1)
-      const mouse = new THREE.Vector2();
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-      
-      // set the raycaster origin and direction based on the mouse position
-      this.raycaster.setFromCamera(mouse, this.camera);
-      
-      // detect all intersections between the raycaster and the planets
-      const intersects = this.raycaster.intersectObjects(self);
-      
-      if (intersects.length > 0) {
-        // call the onHover function of the first intersected planet
-        intersects[0].object.userData.onHover();
-      } else {
-        // hide the tooltip if the mouse is not hovering over a planet
-        tooltip.style.visibility = 'hidden';
-      }
-    });
-  }
-
 }
