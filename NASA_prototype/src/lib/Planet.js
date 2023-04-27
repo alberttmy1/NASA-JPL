@@ -173,7 +173,9 @@ export default class Planet {
         system.add(this.halo);
 
         // add planet label
-        this.planetLabel = new CSS2DObject(document.createElement('div'));
+        var div = document.createElement('div');
+        div.setAttribute('id', 'planet_label');
+        this.planetLabel = new CSS2DObject(div);
         this.planetLabel.element.textContent = this.name.split(' ')[0];
         this.planetLabel.element.style.color = 'white';
         this.planetLabel.name = 'planetLabel';

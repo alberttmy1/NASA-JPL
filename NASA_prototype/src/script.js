@@ -168,7 +168,7 @@ function add_sun(){
   solarSystem.add(sunHalo);
   test.scene.add(solarSystem);
 }
-const starTexture = new THREE.TextureLoader().load(images['galaxy.jpg'].default);
+const starTexture = new THREE.TextureLoader().load(images['2k_stars_milky_way.jpg'].default);
 test.scene.background = starTexture;
 
 // Listen for changes to the checkbox
@@ -311,6 +311,10 @@ function clean_system(){
   while(planets.length > 0){
     planets.pop();
   }
+
+  const labels = document.querySelectorAll('#planet_label');
+  labels.forEach(element => element.remove());
+
 }
 
 //loads in new mission
