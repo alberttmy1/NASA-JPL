@@ -6,7 +6,7 @@ import * as THREE from "three";
 // import font_file from '../fonts/Bebas_Neue_Regular.json';
 // import dro from 'three/examples/fonts/droid/droid_serif_regular.typeface.json';
 import SceneInit from "./SceneInit";
-import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 
 //pos is array of planet positions
 //check if pos[0] is equal to current days planet position

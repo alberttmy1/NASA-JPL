@@ -7,8 +7,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass';
 
-import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
-
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 export default class SceneInit {
 
   constructor(fov = 5, camera, scene, stats, controls, renderer, raycaster, mouse, label, labelDiv, labelRenderer) {
