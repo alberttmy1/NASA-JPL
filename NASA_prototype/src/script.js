@@ -168,7 +168,7 @@ function add_sun(){
   solarSystem.add(sunHalo);
   test.scene.add(solarSystem);
 }
-const starTexture = new THREE.TextureLoader().load(images['galaxy.jpg'].default);
+const starTexture = new THREE.TextureLoader().load(images['2k_stars_milky_way.jpg'].default);
 test.scene.background = starTexture;
 
 // Listen for changes to the checkbox
@@ -259,6 +259,12 @@ function add_planet(name,time,len){
       objGradCheckbox.addEventListener('change', function() {
           planet.update('grad');
       });
+
+      var planetNamesCheckbox = document.getElementById('planet_names');
+      planetNamesCheckbox.addEventListener('change', function() {
+        planet.planetLabel.visible = planetNamesCheckbox.checked;
+      });
+
     })
     .catch((error) => {
       console.log(error)
@@ -267,6 +273,17 @@ function add_planet(name,time,len){
 
 //loads in planets
 function load_system(start,len){
+  // create a tooltip element
+  const tooltip = document.createElement('div');
+  tooltip.style.position = 'absolute';
+  tooltip.style.zIndex = '1';
+  tooltip.style.visibility = 'hidden';
+  tooltip.style.backgroundColor = 'white';
+  tooltip.style.padding = '5px';
+
+  // add the tooltip element to the document body
+  document.body.appendChild(tooltip);
+
   add_sun();
   (async () => {
     var objects = [];
@@ -294,6 +311,10 @@ function clean_system(){
   while(planets.length > 0){
     planets.pop();
   }
+
+  const labels = document.querySelectorAll('#planet_label');
+  labels.forEach(element => element.remove());
+
 }
 
 //loads in new mission
@@ -323,7 +344,7 @@ load_system(date.toISOString(),10000);
 // get mission names from backend 
 var missions_back = [];
 
-var missions = ["APOLLO", "BEPICOLOMBO", "CASSINI","CHANDRA", 
+var missions_all = ["APOLLO", "BEPICOLOMBO", "CASSINI","CHANDRA", 
 "CLEMENTINE","CONTOUR","DART","DAWN","DEEPIMPACT","DS1","EUROPACLIPPER","EXOMARS2016","FIDO","GIOTTO","GLL","GNS","GRAIL",
 "HAYABUSA", "HELIOS", "HST","INSIGHT","IUE","JUNO","JWST","LADEE","LPM","LRO","LUCY","LUNARORBITER",
 "M01", "M10",  "M2", "M9", "MARS2020", "MAVEN", "MCO", "MER", "MESSENGER", "MEX", "MGN", "MGS", "MPF", "MPL", "MRO", 
@@ -331,5 +352,64 @@ var missions = ["APOLLO", "BEPICOLOMBO", "CASSINI","CHANDRA",
 "PIONEER6", "PIONEER8", "PSYCHE", "ROCKY7", "ROSETTA", "SDU", "SELENE", "SIRTF", "SMAP", "SMART1", "SPP", "STEREO", "TDRSS", 
 "THEMIS", "ULYSSES", "VEGA", "VEX", "VIKING", "VOYAGER"]; 
 
-addButtons(missions, "mission_library", "pinned_missions");
 
+//addButtons(missions_current, "mission_library", "pinned_missions");
+
+// Mission Trajectories Checkboxs 
+var voyagerTrajCheckbox = document.getElementById('Voyager_1_traj');
+voyagerTrajCheckbox.addEventListener('change', function() {
+  if (voyagerTrajCheckbox.checked){
+    mission_data('VOYAGER 1', '2030-12-31T00:00:00.000Z','19475');
+  }else{
+    clean_system();
+    load_system(date.toISOString(),10000);
+  }
+});
+
+var ladeeTrajCheckbox = document.getElementById('Ladee_1_traj');
+ladeeTrajCheckbox.addEventListener('change', function() {
+  if (ladeeTrajCheckbox.checked){
+    mission_data('LADEE', '2014-04-07T00:00:00.000Z','100');
+  }else{
+    clean_system();
+    load_system(date.toISOString(),10000);
+  }
+});
+
+var heliosTrajCheckbox = document.getElementById('Helios_1_traj');
+heliosTrajCheckbox.addEventListener('change', function() {
+  if (heliosTrajCheckbox.checked){
+    mission_data('HELIOS 1', '1974-09-29T00:00:00.000Z','10');
+  }else{
+    clean_system();
+    load_system(date.toISOString(),10000);
+  }
+});
+
+// Mission Gradients Checkboxs 
+var voyagerGradCheckbox = document.getElementById('Voyager_1_grad');
+voyagerGradCheckbox.addEventListener('change', function() {
+  if (voyagerGradCheckbox.checked){
+    // TODO
+  }else{
+    // TODO 
+  }
+});
+
+var ladeeGradCheckbox = document.getElementById('Ladee_1_grad');
+ladeeGradCheckbox.addEventListener('change', function() {
+  if (ladeeGradCheckbox.checked){
+    // TODO
+  }else{
+    // TODO
+  }
+});
+
+var heliosGradCheckbox = document.getElementById('Helios_1_grad');
+heliosGradCheckbox.addEventListener('change', function() {
+  if (heliosGradCheckbox.checked){
+    // TODO
+  }else{
+    // TODO
+  }
+});

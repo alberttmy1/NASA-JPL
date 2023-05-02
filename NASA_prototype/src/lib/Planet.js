@@ -6,6 +6,7 @@ import * as THREE from "three";
 // import font_file from '../fonts/Bebas_Neue_Regular.json';
 // import dro from 'three/examples/fonts/droid/droid_serif_regular.typeface.json';
 import SceneInit from "./SceneInit";
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 
 //pos is array of planet positions
 //check if pos[0] is equal to current days planet position
@@ -14,7 +15,8 @@ import SceneInit from "./SceneInit";
 //pos.unshift([x,y,z]) adds new planet position to front
 
 export default class Planet {
-  constructor(radius, positionX, positionY, positionZ, name, screen, date,isMission,length/*, textureFile*/) {
+  constructor(radius, positionX, positionY, positionZ, name, screen, date,isMission,length, planetLabel/*, textureFile*/) {
+    // screen.scene 
     this.screen = screen;
     this.date = date;
     this.radius = this.toAU(radius);
@@ -35,6 +37,7 @@ export default class Planet {
     // this.textName = this.displayName(name, this.toAU(positionX),this.toAU(positionY),this.toAU(positionZ));
     this.system = undefined;
     this.createOrbit();
+    this.planetLabel = planetLabel;
   }
 
   toAU(km){
@@ -168,9 +171,23 @@ export default class Planet {
         system.add(planetMesh);
         system.add(this.orbit);
         system.add(this.halo);
-        // system.add(this.textName);
+
+        // add planet label
+        var div = document.createElement('div');
+        div.setAttribute('id', 'planet_label');
+        this.planetLabel = new CSS2DObject(div);
+        this.planetLabel.element.textContent = this.name.split(' ')[0];
+        this.planetLabel.element.style.color = 'white';
+        this.planetLabel.name = 'planetLabel';
+        this.planetLabel.position.set(planetMesh.position.x, planetMesh.position.y, planetMesh.position.z);
+        //this.planetLabel.position.set(0, 0, 0);
+        this.screen.scene.add(this.planetLabel);
+
+        system.add(this.planetLabel);
+
+        system.name = this.name;
+
         this.screen.scene.add(system);
-        //console.log("system:" + system);
         this.system = system;
 
         return system;
@@ -215,98 +232,4 @@ export default class Planet {
     line.position.set(this.xPos, this.yPos, this.zPos);
     return line;
   }
-  
-  //will be used to display planet name near planet
-  displayName(name, x, y,z){
-    // const data = require('./fonts/Vogue_Regular.json');
-    // const fonts = fontAll(require.context('./font', false, /\.(json)$/));
-    //"../fonts/Vogue_Regular.json"
-    // ../fonts/Bebas_Neue_Regular.json'
-    // node_modules/three/examples/fonts/droid/droid_serif_regular.typeface.json
-
-
-    // Create a canvas element
-    var canvas = document.createElement('canvas');
-    var context = canvas.getContext('2d');
-
-    // Set canvas size
-    canvas.width = 6;
-    canvas.height = 10;
-
-    // Set text properties
-    context.font = '5px Arial';
-    context.fillStyle = 'white';
-    
-
-    // Draw text on canvas
-    context.fillText(name, canvas.width / 2, canvas.height / 2);
-
-    // Create a texture from the canvas
-    var texture = new THREE.CanvasTexture(canvas);
-
-    // Create a plane geometry to display the text
-    var geometry = new THREE.PlaneGeometry(6, 2);
-    var material = new THREE.MeshBasicMaterial({ map: texture });
-    var mesh = new THREE.Mesh(geometry, material);
-    
-    mesh.position.set(x, y, z);
-
-    // Add the mesh to the scene
-    return mesh;
-    
-    // const canvas = document.createElement('canvas');
-    // const context = canvas.getContext('2d');
-    // context.fillStyle = 'green';
-    // context.font = 'italic 5px Arial';
-    // // context.textAlign = 'center';
-    // context. textBaseline = 'middle';
-    // context.fillText(name, 0, 10);
-    // const texture = new THREE.Texture(canvas);
-    
-    // texture.needsUpdate = true;
-    // var material = new THREE.MeshBasicMaterial({
-    //   map: texture,
-    //   side: THREE.DoubleSide,
-    // })
-    // material.transparent = true
-    // var mesh = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), material)
-    // mesh.position.set(x, y, z);
-    // return mesh
-
-    // var fontLoader = new FontLoader();
-    // console.log("name");
-    // // console.log("../fonts/Bebas_Neue_Regular.json");
-    // fontLoader.load("three/examples/fonts/droid/droid_serif_regular.typeface.json", (font) => {
-    // // Create a TextGeometry using the loaded font
-    //   console.log("name");
-    //   const text = new TextGeometry(name, {
-    //     font: font,
-    //     size: 1,
-    //     height: 0.1,
-    //     });
-    //     const textMaterial = new THREE.MeshNormalMaterial();
-    //     const textMesh = new THREE.Mesh(text, textMaterial);
-    //     textMesh.position.x = -46;
-    //     textMesh.position.y = -10;
-    //     return textMesh;
-    // });
-
-    // const ttfLoader = new TTFLoader();
-    // ttfLoader.load("../fonts/jet_brains_mono_regular.ttf", (json) => {
-    //   // First parse the font.
-    //   const jetBrainsFont = fontLoader.parse(json);
-    //   // Use parsed font as normal.
-    //   const textGeometry = new TextGeometry(name, {
-    //     height: 2,
-    //     size: 10,
-    //     font: jetBrainsFont,
-    //   });
-    //   const textMaterial = new THREE.MeshNormalMaterial();
-    //   const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-    //   textMesh.position.x = -46;
-    //   textMesh.position.y = -10;
-    //   return textMesh;
-    // });
-  }
-
 }

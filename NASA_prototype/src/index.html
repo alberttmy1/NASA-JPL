@@ -21,7 +21,7 @@
       <ul>
         <li><a href="#">Home </a></li>
         
-        <li><a href="#">Test Spice</a>
+        <!-- <li><a href="#">Test Spice</a>
           <ul class="sub-menu">
             <li>
               <form id="spicey"action="">
@@ -42,7 +42,7 @@
               </script>
             </li>
           </ul>
-        </li>
+        </li> -->
         <li><a href="#">Upload Kernel</a>
           <ul class="sub-menu">
             <li>
@@ -58,15 +58,19 @@
           <ul class="sub-menu">
             <li>
               <input type="checkbox" id="env_body" name="showBody" value="Body" checked>
-              <label for="env_body"> Show Solar System</label>
+              <label for="env_body"> Show Galaxy</label>
             </li>
             <li>
                 <input type="checkbox" id="env_traj" name="showTraj" value="Trajectory" checked>
-                <label for="env_traj"> Show All Trajectories</label>
+                <label for="env_traj"> Show All Orbits</label>
             </li>
             <li>
                 <input type="checkbox" id="env_grad" name="showGrad" value="Speed Gradient" checked>
                 <label for="env_grad"> Show All Speed Gradients</label>
+            </li>
+            <li>
+              <input type="checkbox" id="planet_names" name="showPlanetNames" value="Planet Names" checked>
+              <label for="env_grad"> Show Planet Names</label>
             </li>
           </ul>
         </li>
@@ -88,17 +92,29 @@
         <li><a href="#">Spacecrafts</a>
           <ul class="sub-menu">
             <li>
-              <button type="button"  class="collapsible">Pinned Spacecrafts</button>
-              <div class="content" id = "pinned_missions">
-                <button type="button" id="VOYAGER 1" onclick="mission_data('VOYAGER 1', '2030-12-31T00:00:00.000Z','19475')">VOYAGER</button>
-                <button type="button" id="Helios" onclick="mission_data('HELIOS 1', '1974-09-29T00:00:00.000Z','10')">HELIOS</button>
-                <button type="button" id="LADEE" onclick="mission_data('LADEE', '2014-04-07T00:00:00.000Z','100')">LADEE</button>
+              <button type="button"  class="collapsible">Voyager 1</button>
+              <div class="content">
+                <input type = "checkbox" id ="Voyager_1_traj">
+                <label for="show_voyager_traj">Show Trajectory</label>
+                <br>
               </div>
             </li>
+
+            <!-- <li>
+              <button type="button"  class="collapsible">Helios</button>
+              <div class="content">
+                <input type = "checkbox" id ="Helios_1_traj">
+                <label for="show_helios_traj">Show Trajectory</label>
+                <br>
+              </div>
+            </li> -->
+
             <li>
-              <button type="button"  class="collapsible">Missions Library</button>
-              <div class="content" id = "mission_library">
-                <input type="text" placeholder="Search Missons.." id="missionInput" onkeyup="searchMissions()">
+              <button type="button"  class="collapsible">Ladee</button>
+              <div class="content">
+                <input type = "checkbox" id ="Ladee_1_traj">
+                <label for="show_ladee_traj">Show Trajectory</label>
+                <br>
               </div>
             </li>
           </ul>
